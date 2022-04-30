@@ -19,7 +19,7 @@ const isAnalyzer = env.ANALYZER === 'true';
 
 let config = {
   entry: {
-    mainPage: path.resolve(__dirname, 'src/pages/MainPage/index.tsx'),
+    app: path.resolve(__dirname, 'src/pages/app.tsx'),
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -44,7 +44,15 @@ let config = {
           'css-loader',
           {
             loader: 'less-loader',
-            options: { lessOptions: { javascriptEnabled: true } },
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+                modifyVars: {
+                  'primary-color': '#8621dc',
+                  'link-color': '#8621dc'
+                }
+              }
+            },
           },
         ],
       },
@@ -79,7 +87,7 @@ let config = {
       filename: 'index.html',
       template: path.resolve(__dirname, 'src/templates/default.ejs'),
       minify: !isDevelopment,
-      chunks: ['mainPage'],
+      chunks: ['app'],
     }),
   ],
   resolve: {
