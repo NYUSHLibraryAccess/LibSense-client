@@ -26,6 +26,7 @@ export type IMetadata = {
   material: string[];
   materialType: string[];
   cdlTags: string[];
+  physicalCopyStatus: string[];
 };
 
 export type IOrder = {
@@ -75,16 +76,17 @@ export type ICdlOrder = IOrder & {
   circPdfUrl: string;
 };
 
-export type IDetailedCdlOrder = ICdlOrder & {
-  orderPurchasedDate: string;
-  dueDate: string;
-  physicalCopyStatus: string;
-  vendorFileUrl: string;
-  bobcatPermanentLink: string;
-  filePassword: string;
-  author: string;
-  pages: string;
-};
+export type IDetailedCdlOrder = IDetailedOrder &
+  ICdlOrder & {
+    orderPurchasedDate: string;
+    dueDate: string;
+    physicalCopyStatus: string;
+    vendorFileUrl: string;
+    bobcatPermanentLink: string;
+    filePassword: string;
+    author: string;
+    pages: string;
+  };
 
 export type IColumn = keyof IOrder | keyof IDetailedOrder | keyof ICdlOrder | keyof IDetailedCdlOrder;
 

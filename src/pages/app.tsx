@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import { Layout } from 'antd';
 import { HeaderBar } from '@/components/HeaderBar';
 import { NavigationMenu } from '@/components/NavigationMenu';
+import { Home } from '@/components/Home';
 import { OrderTable } from '@/components/OrderTable';
 import { FileUploader } from '@/components/FileUploader';
 import { PageNotFound } from '@/components/PageNotFound';
@@ -30,6 +31,7 @@ const App: React.FC = () => {
           <Layout.Content>
             <div className={style.content}>
               <Switch>
+                <Route path="/" exact component={Home} />
                 <Route path="/Orders" component={OrderTable} />
                 <Route path="/Upload" component={FileUploader} />
                 <Route path="*" component={PageNotFound} />

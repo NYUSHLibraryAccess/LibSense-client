@@ -1,0 +1,23 @@
+@import "../../styles/palette";
+
+.img {
+  float: right;
+}
+
+.card {
+  *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.avg :global .ant-statistic-content {
+  color: @palette-Light-Blue-400;
+}
+
+.min :global .ant-statistic-content {
+  color: @palette-Green-400;
+}
+
+.max :global .ant-statistic-content {
+  color: @palette-Red-400;
+}

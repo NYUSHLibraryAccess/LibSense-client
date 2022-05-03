@@ -19,6 +19,7 @@ const initialState: IMetadataState = {
     material: [],
     materialType: [],
     cdlTags: [],
+    physicalCopyStatus: [],
   },
 };
 
@@ -49,6 +50,7 @@ const metadataSlice = createSlice({
           material: prioritizeNull(payload.material),
           materialType: prioritizeNull(payload.materialType),
           cdlTags: prioritizeNull(payload.cdlTags),
+          physicalCopyStatus: prioritizeNull(payload.physicalCopyStatus),
         },
       };
     });

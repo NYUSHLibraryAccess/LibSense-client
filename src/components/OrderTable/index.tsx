@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Button, Card, message, Space, Table, Typography } from 'antd';
 import copy from 'copy-to-clipboard';
 import { requestWithCatch, sortTags, useDidMountEffect, useIsSubscribed } from '@/utils';
-import { ICdlOrder, IColumn, IDetailedOrder, IFilter, IOrder, ITag } from '@/utils/interfaces';
+import { ICdlOrder, IColumn, IDetailedCdlOrder, IDetailedOrder, IFilter, IOrder, ITag } from '@/utils/interfaces';
 import { getAllOrders } from '@/api/getAllOrders';
 import { ColumnSelector, getColumnName, getDefaultColumns } from '@/components/ColumnSelector';
 import { AggregatedFilters, getDefaultFilters } from '@/components/AggregatedFilters';
@@ -13,6 +13,7 @@ import style from './style.module.less';
 import { OrderModal } from '@/components/OrderModal';
 import { getDetailedOrder } from '@/api/getDetailedOrder';
 import { getAllCDLOrders } from '@/api/getAllCDLOrders';
+import { getDetailedCDLOrder } from '@/api/getDetailedCDLOrder';
 
 type IOrderWithKey = { key: number } & (IOrder | ICdlOrder);
 
@@ -43,6 +44,7 @@ const mapPathToDefaultTagsToFilter: Record<string, ITag[]> = {
   '/Orders/Sensitive': ['Sensitive'],
 };
 
+// TODO: separate into CDL and non-CDL
 const OrderTable: React.FC = () => {
   const location = useLocation();
   const [isCdl, setIsCdl] = useState(mapPathToIsCdl[location.pathname]);
@@ -70,7 +72,7 @@ const OrderTable: React.FC = () => {
   // Modal states
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalLoading, setIsModalLoading] = useState(true);
-  const [modalData, setModalData] = useState<IDetailedOrder>();
+  const [modalData, setModalData] = useState<IDetailedOrder | IDetailedCdlOrder>();
 
   // Update `isCdl` and `defaultTagsToFilter` when path changes
   useDidMountEffect(() => {
@@ -120,7 +122,7 @@ const OrderTable: React.FC = () => {
       }
       setIsTableLoading(false);
     });
-  }, [currentPage, pageSize, sorterCol, sorterOrder, filters]);
+  }, [currentPage, pageSize, sorterCol, sorterOrder, filters, isModalVisible]);
 
   return (
     <>
@@ -169,7 +171,7 @@ const OrderTable: React.FC = () => {
             setPageSize(pagination.pageSize);
             // Update sorter
             setSorterCol(sorter.column !== undefined ? sorter.column.dataIndex : 'id');
-            setSorterOrder(sorter.order !== undefined ? sorter.order : 'descend');
+            setSorterOrder(sorter.order !== undefined ? sorter.order : 'ascend');
           }}
         >
           <Table.Column<IOrderWithKey>
@@ -214,28 +216,36 @@ const OrderTable: React.FC = () => {
                   <Button
                     type="link"
                     disabled={(record as ICdlOrder).circPdfUrl === null}
-                    onClick={() => {
+                    onClick={useCallback(() => {
                       // Copy PDF URL to clipboard
                       copy((record as ICdlOrder).circPdfUrl);
                       message.success('Copied PDF URL to clipboard!');
-                    }}
+                    }, [])}
                   >
                     Copy PDF URL
                   </Button>
                 )}
                 <Button
                   type="link"
-                  onClick={() => {
+                  onClick={async () => {
                     // Show order detail modal and request data
                     setModalData(undefined);
                     setIsModalLoading(true);
                     setIsModalVisible(true);
-                    requestWithCatch(getDetailedOrder({ orderId: record.id })).then((r) => {
-                      if (r !== undefined) {
+                    let r = await requestWithCatch(getDetailedOrder({ orderId: record.id }));
+                    if (r !== undefined) {
+                      if (!r.tags.includes('CDL')) {
+                        // Ordinary order
                         setModalData(r);
+                      } else {
+                        // CDL order
+                        r = await requestWithCatch(getDetailedCDLOrder({ orderId: record.id }));
+                        if (r !== undefined) {
+                          setModalData(r);
+                        }
                       }
-                      setIsModalLoading(false);
-                    });
+                    }
+                    setIsModalLoading(false);
                   }}
                 >
                   Edit...
@@ -249,7 +259,14 @@ const OrderTable: React.FC = () => {
           {requestInfo.displayCount.toString()} displayed).
         </Typography.Text>
       </Card>
-      <OrderModal visible={isModalVisible} setVisible={setIsModalVisible} isLoading={isModalLoading} data={modalData} />
+      <OrderModal
+        visible={isModalVisible}
+        setVisible={setIsModalVisible}
+        isLoading={isModalLoading}
+        data={modalData}
+        setData={setModalData}
+        isCdl={isCdl}
+      />
     </>
   );
 };

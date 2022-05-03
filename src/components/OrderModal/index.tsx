@@ -1,18 +1,35 @@
 import * as React from 'react';
-import { Form, Input, Modal, Row, Col, Spin, Space, Button, Tooltip, Typography, Card } from 'antd';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, Input, Modal, Row, Col, Spin, Space, Button, Tooltip, Typography, Card, Select } from 'antd';
 import { TextAreaProps } from 'antd/es/input';
 import { PlusOutlined, LockOutlined } from '@ant-design/icons';
-import { IDetailedOrder } from '@/utils/interfaces';
+import { IAppDispatch, IRootState } from '@/utils/store';
+import { IDetailedCdlOrder, IDetailedOrder, IMetadata } from '@/utils/interfaces';
+import { fetchMetadata } from '@/slices/metadata';
 import style from './style.module.less';
 
-const textAreaAutoSize: Pick<TextAreaProps, 'autoSize'> = { autoSize: { minRows: 1, maxRows: 2 } };
+const textAreaAutoSize: Pick<TextAreaProps, 'autoSize'> = { autoSize: { minRows: 1, maxRows: 3 } };
 
+// TODO: add modification indicator
 const OrderModal: React.FC<{
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
-  data: IDetailedOrder;
-}> = ({ visible, setVisible, isLoading, data }) => {
+  data: IDetailedOrder | IDetailedCdlOrder;
+  setData: React.Dispatch<React.SetStateAction<IDetailedOrder | IDetailedCdlOrder>>;
+  isCdl: boolean;
+}> = ({ visible, setVisible, isLoading, data, setData, isCdl }) => {
+  const dispatch = useDispatch<IAppDispatch>();
+
+  // Metadata states
+  const metadata = useSelector<IRootState, IMetadata>(({ metadata }) => metadata.metadata);
+
+  // Load metadata at component creation
+  useEffect(() => {
+    dispatch(fetchMetadata());
+  }, []);
+
   return (
     <Modal
       title={`Order Detail - ${data?.orderNumber || ''}`}
@@ -41,7 +58,7 @@ const OrderModal: React.FC<{
               }
               size="small"
             >
-              <Form labelCol={{ span: 7 }} wrapperCol={{ span: 17 }} className={style.form}>
+              <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} className={style.form}>
                 <Form.Item label="Title">
                   <Input.TextArea {...textAreaAutoSize} value={data?.title} />
                 </Form.Item>
@@ -69,6 +86,9 @@ const OrderModal: React.FC<{
                 <Form.Item label="BSN">
                   <Input.TextArea {...textAreaAutoSize} value={data?.bsn} />
                 </Form.Item>
+                <Form.Item label="Library Note">
+                  <Input.TextArea rows={2} value={data?.libraryNote} />
+                </Form.Item>
               </Form>
             </Card>
           </Col>
@@ -85,7 +105,7 @@ const OrderModal: React.FC<{
               }
               size="small"
             >
-              <Form labelCol={{ span: 7 }} wrapperCol={{ span: 17 }} className={style.form}>
+              <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} className={style.form}>
                 <Form.Item label="Order Number">
                   <Input.TextArea {...textAreaAutoSize} value={data?.orderNumber} />
                 </Form.Item>
@@ -119,33 +139,143 @@ const OrderModal: React.FC<{
               </Form>
             </Card>
           </Col>
-          {/* Library note */}
-          <Col span={24}>
-            <Card size="small">
-              <Form layout="vertical">
-                <Form.Item label="Library Note">
-                  <Input.TextArea value={data?.libraryNote} />
-                </Form.Item>
-              </Form>
-            </Card>
-          </Col>
+          {/* CDL Information */}
+          {data?.tags.includes('CDL') && (
+            <Col span={24}>
+              <Card size="small" title={<Typography.Title level={5}>CDL Information</Typography.Title>}>
+                <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} className={style.form}>
+                  <Row gutter={[16, 16]}>
+                    {/* CDL Item Status */}
+                    <Col span={12}>
+                      <Form.Item label="CDL Item Status">
+                        <Select
+                          options={metadata.cdlTags.map((item) => ({
+                            value: item,
+                            label: item !== null ? item : '(Empty)',
+                          }))}
+                          value={(data as IDetailedCdlOrder)?.cdlItemStatus}
+                          onChange={(value) => {
+                            setData({
+                              ...data,
+                              cdlItemStatus: value,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Physical Copy Status */}
+                    <Col span={12}>
+                      <Form.Item label="Physical Copy Status">
+                        <Select
+                          options={metadata.physicalCopyStatus.map((item) => ({
+                            value: item,
+                            label: item !== null ? item : '(Empty)',
+                          }))}
+                          value={(data as IDetailedCdlOrder)?.physicalCopyStatus}
+                          onChange={(value) => {
+                            setData({
+                              ...data,
+                              physicalCopyStatus: value,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* BobCat Permanent Link */}
+                    <Col span={24}>
+                      <Form.Item labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="BobCat Permanent Link">
+                        <Input.TextArea
+                          {...textAreaAutoSize}
+                          value={(data as IDetailedCdlOrder)?.bobcatPermanentLink}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              bobcatPermanentLink: e.target.value,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Circ PDF URL */}
+                    <Col span={24}>
+                      <Form.Item labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Circ PDF URL">
+                        <Input.TextArea
+                          {...textAreaAutoSize}
+                          value={(data as IDetailedCdlOrder)?.circPdfUrl}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              circPdfUrl: e.target.value,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Vendor File URL */}
+                    <Col span={24}>
+                      <Form.Item labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Vendor File URL">
+                        <Input.TextArea
+                          {...textAreaAutoSize}
+                          value={(data as IDetailedCdlOrder)?.vendorFileUrl}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              vendorFileUrl: e.target.value,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* File Password */}
+                    <Col span={24}>
+                      <Form.Item labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="File Password">
+                        <Input.TextArea
+                          {...textAreaAutoSize}
+                          value={(data as IDetailedCdlOrder)?.filePassword}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              filePassword: e.target.value,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Tracking Note */}
+                    <Col span={24}>
+                      <Form.Item labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Tracking Note">
+                        <Input.TextArea
+                          rows={2}
+                          value={(data as IDetailedCdlOrder)?.filePassword}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              filePassword: e.target.value,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </Card>
+            </Col>
+          )}
           {/* Buttons */}
           <Col span={24}>
-            <Card size="small">
-              <Space className={style.buttons}>
-                <Button
-                  icon={<PlusOutlined />}
-                  onClick={() => {
-                    Modal.confirm({
-                      title: 'Register as CDL Order',
-                      content: 'Confirm to register this order as a CDL order?',
-                    });
-                  }}
-                >
-                  Register as CDL
-                </Button>
-              </Space>
-            </Card>
+            <Space className={style.buttons}>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  Modal.confirm({
+                    title: 'Register as CDL Order',
+                    content: 'Confirm to register this order as a CDL order?',
+                  });
+                }}
+              >
+                Register as CDL
+              </Button>
+            </Space>
           </Col>
         </Row>
       </Spin>
