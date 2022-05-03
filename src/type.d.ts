@@ -11,3 +11,5 @@ declare module '*.css';
 declare module '*.sass';
 declare module '*.scss';
 declare module '*.less';
+declare const module: { hot: { accept: () => void } };
+declare const __IS_DEV__: boolean;

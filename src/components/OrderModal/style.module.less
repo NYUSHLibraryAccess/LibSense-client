@@ -1,5 +1,29 @@
-.buttons {
-  display: flex;
-  flex-direction: row-reverse;
-  margin-bottom: 16px;
+.modal {
+  :global .ant-modal {
+    &-body {
+      background-color: #fafafa;
+    }
+  }
+
+  .form {
+    :global .ant-form-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 14px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      :global .ant-form-item-label label {
+        white-space: pre-wrap;
+      }
+    }
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
 }

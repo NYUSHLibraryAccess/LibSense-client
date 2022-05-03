@@ -1,180 +1,153 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
-import { Form, Input, Modal, Row, Col, Spin, Space, Button } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { getOneOrder } from '@/api/getOneOrder';
+import { Form, Input, Modal, Row, Col, Spin, Space, Button, Tooltip, Typography, Card } from 'antd';
+import { TextAreaProps } from 'antd/es/input';
+import { PlusOutlined, LockOutlined } from '@ant-design/icons';
 import { IDetailedOrder } from '@/utils/interfaces';
-import { requestWithCatch } from '@/utils/requestWithCatch';
 import style from './style.module.less';
 
-const OrderModal: React.FC<RouteComponentProps<{ orderId: string }>> = ({ history, match }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<IDetailedOrder>();
+const textAreaAutoSize: Pick<TextAreaProps, 'autoSize'> = { autoSize: { minRows: 1, maxRows: 2 } };
 
-  // Update order detail on component creation
-  useEffect(() => {
-    setIsLoading(true);
-    requestWithCatch(
-      getOneOrder({
-        orderId: Number.parseInt(match.params.orderId),
-      })
-    ).then((r) => {
-      if (r !== undefined) {
-        setData(r);
-      }
-      setIsLoading(false);
-    });
-  }, []);
-
+const OrderModal: React.FC<{
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+  data: IDetailedOrder;
+}> = ({ visible, setVisible, isLoading, data }) => {
   return (
     <Modal
-      title={`Order Detail - ${data?.orderNumber}`}
-      visible
+      title={`Order Detail - ${data?.orderNumber || ''}`}
+      visible={visible}
+      className={style.modal}
+      onOk={() => {
+        setVisible(true);
+      }}
       onCancel={() => {
-        history.goBack();
+        setVisible(false);
       }}
       width={1200}
     >
-      <Spin tip="Loading..." delay={100} spinning={isLoading}>
-        <Space className={style.buttons}>
-          <Button
-            icon={<PlusOutlined />}
-            onClick={() => {
-              Modal.confirm({
-                title: 'Register as CDL Order',
-                content: 'Confirm to register this order as a CDL order?',
-              });
-            }}
-          >
-            Register as CDL
-          </Button>
-        </Space>
-        <Form labelCol={{ span: 8, flex: 'string' }} wrapperCol={{ span: 16 }}>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label="Title">
-                <Input.TextArea value={data?.title} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Order Number">
-                <Input value={data?.orderNumber} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label="Barcode">
-                <Input value={data?.barcode} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Order Created Date">
-                <Input value={data?.createdDate} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label="Material Format">
-                <Input value={data?.material} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Arrival or not">
-                <Input value={data?.arrivalText} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label="IPS Code">
-                <Input value={data?.ipsCode} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Order Arrival Date">
-                <Input value={data?.arrivalDate} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label="IPS">
-                <Input value={data?.ips} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Who Mark Arrival">
-                <Input value={data?.arrivalOperator} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label="IPS Changed Date">
-                <Input value={data?.ipsUpdateDate} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Arrival Status">
-                <Input value={data?.arrivalStatus} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label="Item Changed Date">
-                <Input value={data?.updateDate} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Order Status Date">
-                <Input value={data?.ipsDate} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label="Who Changed Item">
-                <Input value={data?.ipsCodeOperator} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Order Changed Date">
-                <Input value={data?.orderStatusUpdateDate} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label="BSN">
-                <Input value={data?.bsn} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Vendor Code">
-                <Input value={data?.vendorCode} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={12}></Col>
-            <Col span={12}>
-              <Form.Item label="Total Price">
-                <Input value={data?.totalPrice} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <Form.Item label="Library Note" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
-                <Input.TextArea value={data?.libraryNote} />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
+      <Spin tip="Loading..." delay={50} spinning={isLoading}>
+        <Row gutter={[16, 16]}>
+          {/* Left column */}
+          <Col span={12}>
+            <Card
+              title={
+                <Typography.Title level={5}>
+                  Item Information{' '}
+                  <Tooltip title="This section is read-only">
+                    <LockOutlined />
+                  </Tooltip>
+                </Typography.Title>
+              }
+              size="small"
+            >
+              <Form labelCol={{ span: 7 }} wrapperCol={{ span: 17 }} className={style.form}>
+                <Form.Item label="Title">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.title} />
+                </Form.Item>
+                <Form.Item label="Barcode">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.barcode} />
+                </Form.Item>
+                <Form.Item label="Material Format">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.material} />
+                </Form.Item>
+                <Form.Item label="IPS Code">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.ipsCode} />
+                </Form.Item>
+                <Form.Item label="IPS">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.ips} />
+                </Form.Item>
+                <Form.Item label="IPS Changed Date">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.ipsUpdateDate} />
+                </Form.Item>
+                <Form.Item label="Item Changed Date">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.updateDate} />
+                </Form.Item>
+                <Form.Item label="Who Changed Item">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.ipsCodeOperator} />
+                </Form.Item>
+                <Form.Item label="BSN">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.bsn} />
+                </Form.Item>
+              </Form>
+            </Card>
+          </Col>
+          {/* Right column */}
+          <Col span={12}>
+            <Card
+              title={
+                <Typography.Title level={5}>
+                  Order Information{' '}
+                  <Tooltip title="This section is read-only">
+                    <LockOutlined />
+                  </Tooltip>
+                </Typography.Title>
+              }
+              size="small"
+            >
+              <Form labelCol={{ span: 7 }} wrapperCol={{ span: 17 }} className={style.form}>
+                <Form.Item label="Order Number">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.orderNumber} />
+                </Form.Item>
+                <Form.Item label="Order Created Date">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.createdDate} />
+                </Form.Item>
+                <Form.Item label="Arrival or not">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.arrivalText} />
+                </Form.Item>
+                <Form.Item label="Order Arrival Date">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.arrivalDate} />
+                </Form.Item>
+                <Form.Item label="Who Mark Arrival">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.arrivalOperator} />
+                </Form.Item>
+                <Form.Item label="Arrival Status">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.arrivalStatus} />
+                </Form.Item>
+                <Form.Item label="Order Status Date">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.ipsDate} />
+                </Form.Item>
+                <Form.Item label="Order Changed Date">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.orderStatusUpdateDate} />
+                </Form.Item>
+                <Form.Item label="Vendor Code">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.vendorCode} />
+                </Form.Item>
+                <Form.Item label="Total Price">
+                  <Input.TextArea {...textAreaAutoSize} value={data?.totalPrice} />
+                </Form.Item>
+              </Form>
+            </Card>
+          </Col>
+          {/* Library note */}
+          <Col span={24}>
+            <Card size="small">
+              <Form layout="vertical">
+                <Form.Item label="Library Note">
+                  <Input.TextArea value={data?.libraryNote} />
+                </Form.Item>
+              </Form>
+            </Card>
+          </Col>
+          {/* Buttons */}
+          <Col span={24}>
+            <Card size="small">
+              <Space className={style.buttons}>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    Modal.confirm({
+                      title: 'Register as CDL Order',
+                      content: 'Confirm to register this order as a CDL order?',
+                    });
+                  }}
+                >
+                  Register as CDL
+                </Button>
+              </Space>
+            </Card>
+          </Col>
+        </Row>
       </Spin>
     </Modal>
   );

@@ -1,6 +1,34 @@
-type ITag = 'Rush' | 'Non-Rush' | 'CDL' | 'Local' | 'NYC' | 'Course-Reserve' | 'DVD' | 'ILL' | 'Sensitive';
+// Type definitions used by API
 
-type IOrder = {
+export type IOverview = {
+  localRushPending: number;
+  avgCdlScan: number;
+  avgCdl: number;
+  avgRushNyc: number;
+  avgRushLocal: number;
+  maxCdlScan: number;
+  maxCdl: number;
+  maxRushNyc: number;
+  maxRushLocal: number;
+  minCdlScan: number;
+  minCdl: number;
+  minRushNyc: number;
+  minRushLocal: number;
+};
+
+export type ITag = 'Rush' | 'Non-Rush' | 'CDL' | 'Local' | 'NYC' | 'Course-Reserve' | 'DVD' | 'ILL' | 'Sensitive';
+
+export type IMetadata = {
+  ipsCode: string[];
+  tags: ITag[];
+  vendors: string[];
+  oldestDate: string;
+  material: string[];
+  materialType: string[];
+  cdlTags: string[];
+};
+
+export type IOrder = {
   id: number;
   tags: ITag[];
   barcode: string;
@@ -13,10 +41,9 @@ type IOrder = {
   ipsDate: string;
   vendorCode: string;
   libraryNote: string;
-  overrideDate: string;
 };
 
-type IDetailedOrder = IOrder & {
+export type IDetailedOrder = IOrder & {
   bsn: string;
   arrivalText: string;
   arrivalStatus: string;
@@ -39,13 +66,30 @@ type IDetailedOrder = IOrder & {
   trackingNote: string;
 };
 
-type IMetadata = {
-  ipsCode: (string | null)[];
-  tags: (string | null)[];
-  vendors: (string | null)[];
-  oldestDate: string;
-  material: (string | null)[];
-  materialType: (string | null)[];
-} & Record<string, string>;
+export type ICdlOrder = IOrder & {
+  cdlItemStatus: string[];
+  orderRequestDate: string;
+  scanningVendorPaymentDate: string;
+  pdfDeliveryDate: string;
+  backToKarmsDate: string;
+  circPdfUrl: string;
+};
 
-export { ITag, IOrder, IDetailedOrder, IMetadata };
+export type IDetailedCdlOrder = ICdlOrder & {
+  orderPurchasedDate: string;
+  dueDate: string;
+  physicalCopyStatus: string;
+  vendorFileUrl: string;
+  bobcatPermanentLink: string;
+  filePassword: string;
+  author: string;
+  pages: string;
+};
+
+export type IColumn = keyof IOrder | keyof IDetailedOrder | keyof ICdlOrder | keyof IDetailedCdlOrder;
+
+export type IFilter =
+  | { op: 'in'; col: 'tags'; val: ITag[] }
+  | { op: 'in'; col: Exclude<IColumn, 'tags'>; val: string[] }
+  | { op: 'like'; col: IColumn; val: string }
+  | { op: 'between'; col: IColumn; val: [string, string] };

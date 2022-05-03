@@ -3,14 +3,15 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Dropdown, Menu } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
-import { IAuthState, setDisplayUsername } from '@/slices/authState';
+import { setDisplayUsername } from '@/slices/auth';
+import { IRootState, IAppDispatch } from '@/utils/store';
 import style from './style.module.less';
 import Logo from '@/images/books.png';
 import User from '@/images/user.png';
 
 const HeaderBar: React.FC = () => {
-  const username = useSelector<{ authState: IAuthState }>(({ authState }) => authState.displayUsername);
-  const dispatch = useDispatch();
+  const username = useSelector<IRootState>(({ auth }) => auth.displayUsername);
+  const dispatch = useDispatch<IAppDispatch>();
 
   useEffect(() => {
     setTimeout(() => {
@@ -27,7 +28,9 @@ const HeaderBar: React.FC = () => {
       <Dropdown
         overlay={
           <Menu>
-            <Menu.Item icon={<LogoutOutlined />}>Log Out</Menu.Item>
+            <Menu.Item key="logout" icon={<LogoutOutlined />}>
+              Log Out
+            </Menu.Item>
           </Menu>
         }
         overlayClassName={style.userOverlay}

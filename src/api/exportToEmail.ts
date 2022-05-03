@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { serverAddress } from '@/utils/constants';
+import { urlPrefix } from '@/utils/constants';
 
 type IExportToEmailParams = {
   report_types: string[];
@@ -7,10 +7,12 @@ type IExportToEmailParams = {
   email: string;
 };
 
-type IExportToEmailResponse = string;
+type IExportToEmailResponse = {
+  msg: string;
+};
 
 const exportToEmail = async (params: IExportToEmailParams): Promise<AxiosResponse<IExportToEmailResponse>> => {
-  return axios.post(`http://${serverAddress}/v1/report/send-report`, { ...params });
+  return axios.post(`${urlPrefix}/v1/report/send-report`, { ...params });
 };
 
 export { IExportToEmailParams, IExportToEmailResponse, exportToEmail };

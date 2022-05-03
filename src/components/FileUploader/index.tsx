@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { observer } from 'mobx-react';
 import { Button, Upload, Card, Result, Form, Divider, Space } from 'antd';
 import { FileExcelOutlined } from '@ant-design/icons';
 import { UploadOutlined } from '@ant-design/icons';
-import { serverAddress } from '@/utils/constants';
+import { urlPrefix } from '@/utils/constants';
 import style from './style.module.less';
 
-const FileUploader: React.FC = () => {
+const FileUploader: React.FC = observer(() => {
   const [status, setStatus] = useState(false);
 
   return (
@@ -17,9 +18,8 @@ const FileUploader: React.FC = () => {
             <Upload.Dragger
               className={style.dragBox}
               name="file"
-              action={`http://${serverAddress}/v1/data/upload`}
+              action={`${urlPrefix}/v1/data/upload`}
               onChange={(params) => {
-                console.log(params.file.status);
                 if (params.file.status === 'done') {
                   setStatus(true);
                 }
@@ -48,6 +48,6 @@ const FileUploader: React.FC = () => {
       )}
     </Card>
   );
-};
+});
 
 export { FileUploader };

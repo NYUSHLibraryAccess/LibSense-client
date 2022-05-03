@@ -1,7 +1,9 @@
 import { ITag } from '@/utils/interfaces';
 
-const serverAddress = 'pre.libsense:8081';
+// To compose request URL
+const devUrlPrefix = 'http://pre.libsense:8081';
+const prodUrlPrefix = '';
+export const urlPrefix = __IS_DEV__ ? devUrlPrefix : prodUrlPrefix;
 
-const allTags: ITag[] = ['Rush', 'Non-Rush', 'CDL', 'Local', 'NYC', 'Course-Reserve', 'DVD', 'ILL', 'Sensitive'];
-
-export { serverAddress, allTags };
+// For tag enumerating and sorting
+export const allTags: ITag[] = ['Rush', 'Non-Rush', 'CDL', 'Local', 'NYC', 'Course-Reserve', 'DVD', 'ILL', 'Sensitive'];

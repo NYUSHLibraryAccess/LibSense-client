@@ -8,8 +8,8 @@ const initialState: IAuthState = {
   displayUsername: '',
 };
 
-const authStateSlice = createSlice({
-  name: 'authState',
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
     setDisplayUsername: (state, { payload }: PayloadAction<string>) => ({
@@ -19,7 +19,7 @@ const authStateSlice = createSlice({
   },
 });
 
-const { setDisplayUsername } = authStateSlice.actions;
-const authStateReducer = authStateSlice.reducer;
+const { setDisplayUsername } = authSlice.actions;
+const authReducer = authSlice.reducer;
 
-export { IAuthState, setDisplayUsername, authStateReducer };
+export { IAuthState, setDisplayUsername, authReducer };

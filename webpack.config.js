@@ -1,6 +1,6 @@
 const path = require('path');
 const { merge } = require('webpack-merge');
-const { HotModuleReplacementPlugin } = require('webpack');
+const { DefinePlugin, HotModuleReplacementPlugin } = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin');
 const LodashWebpackPlugin = require('lodash-webpack-plugin');
@@ -88,6 +88,9 @@ let config = {
       template: path.resolve(__dirname, 'src/templates/default.ejs'),
       minify: !isDevelopment,
       chunks: ['app'],
+    }),
+    new DefinePlugin({
+      '__IS_DEV__': JSON.stringify(isDevelopment),
     }),
   ],
   resolve: {

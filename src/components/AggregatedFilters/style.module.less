@@ -1,0 +1,68 @@
+@import '../../styles/constants';
+@import '../../styles/mixins';
+
+.overlay {
+  .noTextSelect;
+
+  .form {
+    width: 450px;
+
+    :global .ant-form-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      :global .ant-form-item-label label {
+        white-space: pre-wrap;
+      }
+    }
+
+    .formItem {
+      :global .ant-form-item-label label {
+        transition: color ease-in-out 150ms;
+      }
+
+      &-Inactive {
+        :global .ant-form-item-label label {
+          color: @inactiveTextColor;
+        }
+      }
+
+      &-Active {
+        :global .ant-form-item-label label {
+          color: #000;
+        }
+      }
+    }
+  }
+
+  .divider {
+    margin: 0;
+  }
+
+  .dateRangePicker {
+    width: 100%;
+  }
+
+  .buttons {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-end;
+
+    :global .ant-space-item:nth-last-child(3) {
+      flex-grow: 1;
+      justify-self: flex-start;
+
+      .spin {
+        display: flex;
+        flex-direction: row;
+      }
+    }
+  }
+}

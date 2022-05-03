@@ -3,25 +3,20 @@ import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
 import { BookOutlined, CloudUploadOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
-import { useDidMountEffect } from '@/utils/useDidMountEffect';
+import style from './style.module.less';
 
-type NavigationInfoItem = {
-  key: string;
-  path: string;
-};
-
-const navigationInfo: NavigationInfoItem[] = [
+const navigationInfo: { key: string; path: string }[] = [
   { key: 'home', path: '/' },
-  { key: 'allOrders', path: '/Orders' },
+  { key: 'allOrders', path: '/Orders/All' },
   { key: 'rushOrders', path: '/Orders/Rush' },
-  { key: 'cdlOrders', path: '/Orders/Rush/CDL' },
-  { key: 'nyOrders', path: '/Orders/Rush/NY' },
-  { key: 'localOrders', path: '/Orders/Rush/Local' },
-  { key: 'dvdOrders', path: '/Orders/Rush/DVD' },
-  { key: 'courseReserveOrders', path: '/Orders/Rush/CourseReserve' },
-  { key: 'illOrders', path: '/Orders/Rush/ILL' },
-  { key: 'nonRushOrders', path: '/Orders/NonRush' },
-  { key: 'sensitiveTitles', path: '/Orders/SensitiveTitles' },
+  { key: 'cdlOrders', path: '/Orders/CDL' },
+  { key: 'nyOrders', path: '/Orders/NYC' },
+  { key: 'localOrders', path: '/Orders/Local' },
+  { key: 'dvdOrders', path: '/Orders/DVD' },
+  { key: 'courseReserveOrders', path: '/Orders/Course-Reserve' },
+  { key: 'illOrders', path: '/Orders/ILL' },
+  { key: 'nonRushOrders', path: '/Orders/Non-Rush' },
+  { key: 'sensitiveTitles', path: '/Orders/Sensitive' },
   { key: 'uploadData', path: '/Upload' },
   { key: 'settings', path: '/Settings' },
 ];
@@ -29,26 +24,27 @@ const navigationInfo: NavigationInfoItem[] = [
 const NavigationMenu: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
-  const [selectedKey, setSelectedKey] = useState<string>('home');
 
-  // Set key at component creation
+  const [selectedKey, setSelectedKey] = useState('home');
+
+  // Set key based on path at component creation
   useEffect(() => {
     const item = navigationInfo.find((item) => item.path === location.pathname);
     item !== undefined && setSelectedKey(item.key);
   }, []);
 
-  // Set path on key update
-  useDidMountEffect(() => {
-    const item = navigationInfo.find((item) => item.key === selectedKey);
-    item !== undefined && history.push(item.path);
-  }, [selectedKey]);
-
   return (
     <Menu
       mode="inline"
+      className={style.menu}
       defaultOpenKeys={['orders']}
       selectedKeys={[selectedKey]}
-      onClick={({ key }) => setSelectedKey(key)}
+      onClick={({ key }) => {
+        setSelectedKey(key);
+        // Update path
+        const item = navigationInfo.find((item) => item.key === key);
+        item !== undefined && history.push(item.path);
+      }}
     >
       <Menu.Item key="home" icon={<HomeOutlined />}>
         Home

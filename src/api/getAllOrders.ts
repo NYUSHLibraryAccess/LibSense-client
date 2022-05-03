@@ -1,17 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
-import { IOrder } from '@/utils/interfaces';
-import { serverAddress } from '@/utils/constants';
-
-type IFilter =
-  | { op: 'in'; col: string; val: string[] }
-  | { op: 'like'; col: string; val: string }
-  | { op: 'between'; col: string; val: [string, string] };
+import { urlPrefix } from '@/utils/constants';
+import { IFilter, IOrder } from '@/utils/interfaces';
 
 type IGetAllOrdersParams = {
   pageIndex: number;
   pageSize: number;
-  filters?: IFilter[];
   sorter?: { col: string; desc: boolean };
+  filters?: IFilter[];
 };
 
 type IGetAllOrdersResponse = {
@@ -22,7 +17,7 @@ type IGetAllOrdersResponse = {
 };
 
 const getAllOrders = async (params: IGetAllOrdersParams): Promise<AxiosResponse<IGetAllOrdersResponse>> => {
-  return axios.post(`http://${serverAddress}/v1/orders/all-orders`, { ...params });
+  return axios.post(`${urlPrefix}/v1/orders/all-orders`, { ...params });
 };
 
-export { IFilter, IGetAllOrdersParams, IGetAllOrdersResponse, getAllOrders };
+export { getAllOrders, IGetAllOrdersParams, IGetAllOrdersResponse };
