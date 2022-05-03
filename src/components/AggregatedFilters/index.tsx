@@ -238,7 +238,7 @@ const AggregatedFilters: React.FC<{
           <Form.Item label="Tags" className={getFormItemClassName(displayData.tagsToFilter.length > 0)}>
             <Select<ITag[]>
               {...selectProps}
-              options={allTags.map((item) => ({ value: item, label: item }))}
+              options={metadata.tags.map((item) => ({ value: item, label: item }))}
               value={displayData.tagsToFilter}
               onChange={(value) => {
                 runInAction(() => {

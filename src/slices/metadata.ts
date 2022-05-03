@@ -43,7 +43,7 @@ const metadataSlice = createSlice({
         hasMetadata: true,
         metadata: {
           ipsCode: prioritizeNull(payload.ipsCode),
-          tags: prioritizeNull(sortTags(payload.tags)),
+          tags: prioritizeNull(sortTags(payload.tags)).filter((item) => item !== 'CDL'),
           vendors: prioritizeNull(payload.vendors),
           oldestDate: payload.oldestDate,
           material: prioritizeNull(payload.material),
