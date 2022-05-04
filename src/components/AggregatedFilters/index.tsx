@@ -163,6 +163,7 @@ const getDefaultFilters = (): IFilter[] => getFilters(defaultData);
 
 // TODO: remove `mobx`
 // TODO: get rid of global navigation state, pass props and use separate Route instead
+// TODO: add height limit to prevent from pointing to wrong position
 const AggregatedFilters: React.FC<{
   isCdl: boolean;
   defaultTagsToFilter: ITag[];

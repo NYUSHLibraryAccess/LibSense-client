@@ -6,17 +6,28 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '@/utils/store';
 import { IOverview } from '@/utils/interfaces';
 import Welcome from '@/images/welcome-back.png';
-import { requestWithCatch } from '@/utils';
+import { useRequest } from '@/utils';
 import { getOverview } from '@/api/getOverview';
 import style from './style.module.less';
+import { useHistory } from 'react-router-dom';
 
 const Home: React.FC = () => {
-  const username = useSelector<IRootState, string>(({ auth }) => auth.displayUsername);
+  const history = useHistory();
+
+  const username = useSelector<IRootState, string>(({ auth }) => auth.username);
 
   const [overview, setOverview] = useState<IOverview>();
 
   useEffect(() => {
-    requestWithCatch(getOverview()).then((r) => {
+    // TODO: check the order between dispatch redux action and router re-rendering, does this hook work?
+    if (username === null) {
+      history.push('/Login');
+    }
+  }, []);
+
+  // TODO: add subscription check
+  useEffect(() => {
+    useRequest(getOverview()).then((r) => {
       if (r !== undefined) {
         setOverview(r);
       }
@@ -40,13 +51,11 @@ const Home: React.FC = () => {
           <Typography.Paragraph>
             <ul>
               <li>
-                Pending Rush-Local orders: <Typography.Text strong>{overview?.localRushPending}</Typography.Text>
+                <Typography.Text strong>{overview?.localRushPending || 0}</Typography.Text> Rush-Local orders pending to
+                be checked.
               </li>
               <li>
-                New York Excel version: <Typography.Text strong>2022-04-19</Typography.Text>
-              </li>
-              <li>
-                Total number of users: <Typography.Text strong>6</Typography.Text>
+                <Typography.Text strong>{overview?.cdlPending || 0}</Typography.Text> CDL orders pending to be checked.
               </li>
             </ul>
           </Typography.Paragraph>

@@ -5,7 +5,7 @@ import { IMetadata } from '@/utils/interfaces';
 type IGetMetadataResponse = IMetadata;
 
 const getMetadata = async (): Promise<AxiosResponse<IGetMetadataResponse>> => {
-  return axios.get(`${urlPrefix}/v1/data/metadata`);
+  return axios.get(`${urlPrefix}/v1/data/metadata`, { withCredentials: true });
 };
 
 export { getMetadata, IGetMetadataResponse };

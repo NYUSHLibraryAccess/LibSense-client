@@ -1,8 +1,8 @@
 import { ITag } from '@/utils/interfaces';
 
 // To compose request URL
-const devUrlPrefix = 'http://pre.libsense:8081';
-const prodUrlPrefix = '';
+const devUrlPrefix = '';
+const prodUrlPrefix = '/api';
 export const urlPrefix = __IS_DEV__ ? devUrlPrefix : prodUrlPrefix;
 
 // For tag enumerating and sorting

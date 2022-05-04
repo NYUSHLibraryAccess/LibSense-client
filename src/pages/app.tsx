@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Layout } from 'antd';
 import { HeaderBar } from '@/components/HeaderBar';
@@ -11,6 +10,8 @@ import { Login } from '@/components/Login';
 import { Home } from '@/components/Home';
 import { OrderTable } from '@/components/OrderTable';
 import { FileUploader } from '@/components/FileUploader';
+import { ExportToEmail } from '@/components/ExportToEmail';
+import { UserManagement } from '@/components/UserManagement';
 import { PageNotFound } from '@/components/PageNotFound';
 import { store } from '@/utils/store';
 import style from './app.module.less';
@@ -39,9 +40,12 @@ const App: React.FC = () => {
           <Layout.Content>
             <div className={style.content}>
               <Switch>
+                <Route path="/Login" component={Login} />
                 <Route path="/" exact component={Home} />
                 <Route path="/Orders" component={OrderTable} />
-                <Route path="/Upload" component={FileUploader} />
+                <Route path="/Settings/Upload" component={FileUploader} />
+                <Route path="/Settings/Export" component={ExportToEmail} />
+                <Route path="/Settings/UserManagement" component={UserManagement} />
                 <Route component={PageNotFound} />
               </Switch>
             </div>

@@ -27,6 +27,7 @@
     "array-move": "^4.0.0",
     "axios": "^0.26.1",
     "copy-to-clipboard": "^3.3.1",
+    "crypto-hash": "^2.0.1",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "mobx": "^6.3.2",

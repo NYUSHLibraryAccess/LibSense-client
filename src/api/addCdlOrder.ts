@@ -25,10 +25,14 @@ type IAddCdlOrderResponse = {
 };
 
 const addCdlOrder = async (params: IAddCdlOrderParams): Promise<AxiosResponse<IAddCdlOrderResponse>> => {
-  return axios.post(`${urlPrefix}/v1/orders/cdl-orders/new_cdl`, {
-    bookId: params.orderId,
-    cdlItemStatus: 'CDL Silent',
-  });
+  return axios.post(
+    `${urlPrefix}/v1/orders/cdl-orders/new_cdl`,
+    {
+      bookId: params.orderId,
+      cdlItemStatus: 'CDL Silent',
+    },
+    { withCredentials: true }
+  );
 };
 
 export { addCdlOrder, IAddCdlOrderParams, IAddCdlOrderResponse };

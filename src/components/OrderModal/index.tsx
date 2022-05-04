@@ -24,7 +24,7 @@ import { IAppDispatch, IRootState } from '@/utils/store';
 import { IDetailedCdlOrder, IDetailedOrder, IMetadata } from '@/utils/interfaces';
 import { fetchMetadata } from '@/slices/metadata';
 import style from './style.module.less';
-import { requestWithCatch } from '@/utils';
+import { useRequest } from '@/utils';
 import { addCdlOrder } from '@/api/addCdlOrder';
 import { removeCdlOrder } from '@/api/removeCdlOrder';
 import { updateCdlOrder } from '@/api/updateCdlOrder';
@@ -59,7 +59,7 @@ const OrderModal: React.FC<{
       visible={visible}
       className={style.modal}
       onOk={() => {
-        requestWithCatch(
+        useRequest(
           updateCdlOrder({
             bookId: data.id,
             author: (data as IDetailedCdlOrder)?.author,
@@ -466,7 +466,7 @@ const OrderModal: React.FC<{
                       title: 'Register as CDL Order',
                       content: 'Confirm to register this order as a CDL order?',
                       onOk: () => {
-                        requestWithCatch(addCdlOrder({ orderId: data.id })).then((r) => {
+                        useRequest(addCdlOrder({ orderId: data.id })).then((r) => {
                           if (r !== undefined) {
                             message.success('Successfully added CDL order!');
                             onReload();
@@ -486,7 +486,7 @@ const OrderModal: React.FC<{
                       title: 'Remove CDL Order',
                       content: 'Confirm to remove this order from CDL order list?',
                       onOk: () => {
-                        requestWithCatch(removeCdlOrder({ orderId: data.id })).then((r) => {
+                        useRequest(removeCdlOrder({ orderId: data.id })).then((r) => {
                           if (r !== undefined) {
                             message.success('Successfully removed CDL order!');
                             onReload();

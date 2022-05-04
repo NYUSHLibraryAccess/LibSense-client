@@ -1,7 +1,10 @@
 // Type definitions used by API
 
+export type IRole = 'System Admin' | 'User';
+
 export type IOverview = {
   localRushPending: number;
+  cdlPending: number;
   avgCdlScan: number;
   avgCdl: number;
   avgRushNyc: number;
@@ -95,3 +98,5 @@ export type IFilter =
   | { op: 'in'; col: Exclude<IColumn, 'tags'>; val: string[] }
   | { op: 'like'; col: IColumn; val: string }
   | { op: 'between'; col: IColumn; val: [string, string] };
+
+export type IReportType = 'RushLocal' | 'CDLOrder' | 'ShanghaiOrder';

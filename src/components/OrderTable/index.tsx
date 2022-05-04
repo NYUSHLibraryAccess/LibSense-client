@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Card, message, Space, Table, Typography } from 'antd';
 import copy from 'copy-to-clipboard';
-import { requestWithCatch, sortTags, useDidMountEffect, useIsSubscribed } from '@/utils';
+import { useRequest, sortTags, useDidMountEffect, useIsSubscribed } from '@/utils';
 import { ICdlOrder, IColumn, IDetailedCdlOrder, IDetailedOrder, IFilter, IOrder, ITag } from '@/utils/interfaces';
 import { getAllOrders } from '@/api/getAllOrders';
 import { ColumnSelector, getColumnName, getDefaultColumns } from '@/components/ColumnSelector';
@@ -84,7 +84,7 @@ const OrderTable: React.FC = () => {
   useEffect(() => {
     setIsTableLoading(true);
     const startTime = performance.now();
-    requestWithCatch(
+    useRequest(
       !isCdl
         ? getAllOrders({
             pageIndex: currentPage - 1,
@@ -232,14 +232,14 @@ const OrderTable: React.FC = () => {
                     setModalData(undefined);
                     setIsModalLoading(true);
                     setIsModalVisible(true);
-                    let r = await requestWithCatch(getDetailedOrder({ orderId: record.id }));
+                    let r = await useRequest(getDetailedOrder({ orderId: record.id }));
                     if (r !== undefined) {
                       if (!r.tags.includes('CDL')) {
                         // Ordinary order
                         setModalData(r);
                       } else {
                         // CDL order
-                        r = await requestWithCatch(getDetailedCdlOrder({ orderId: record.id }));
+                        r = await useRequest(getDetailedCdlOrder({ orderId: record.id }));
                         if (r !== undefined) {
                           setModalData(r);
                         }
@@ -271,14 +271,14 @@ const OrderTable: React.FC = () => {
           setModalData(undefined);
           setIsModalLoading(true);
           setIsModalVisible(true);
-          let r = await requestWithCatch(getDetailedOrder({ orderId: modalData.id }));
+          let r = await useRequest(getDetailedOrder({ orderId: modalData.id }));
           if (r !== undefined) {
             if (!r.tags.includes('CDL')) {
               // Ordinary order
               setModalData(r);
             } else {
               // CDL order
-              r = await requestWithCatch(getDetailedCdlOrder({ orderId: modalData.id }));
+              r = await useRequest(getDetailedCdlOrder({ orderId: modalData.id }));
               if (r !== undefined) {
                 setModalData(r);
               }

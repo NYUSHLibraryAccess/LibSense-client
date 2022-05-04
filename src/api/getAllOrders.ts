@@ -17,7 +17,7 @@ type IGetAllOrdersResponse = {
 };
 
 const getAllOrders = async (params: IGetAllOrdersParams): Promise<AxiosResponse<IGetAllOrdersResponse>> => {
-  return axios.post(`${urlPrefix}/v1/orders/all-orders`, { ...params });
+  return axios.post(`${urlPrefix}/v1/orders/all-orders`, { ...params }, { withCredentials: true });
 };
 
 export { getAllOrders, IGetAllOrdersParams, IGetAllOrdersResponse };

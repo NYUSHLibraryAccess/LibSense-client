@@ -17,7 +17,7 @@ type IGetAllCdlOrdersResponse = {
 };
 
 const getAllCdlOrders = async (params: IGetAllCdlOrdersParams): Promise<AxiosResponse<IGetAllCdlOrdersResponse>> => {
-  return axios.post(`${urlPrefix}/v1/orders/cdl-orders`, { ...params });
+  return axios.post(`${urlPrefix}/v1/orders/cdl-orders`, { ...params }, { withCredentials: true });
 };
 
 export { getAllCdlOrders, IGetAllCdlOrdersParams, IGetAllCdlOrdersResponse };

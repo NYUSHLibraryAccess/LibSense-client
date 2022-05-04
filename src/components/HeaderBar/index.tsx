@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Dropdown, Menu } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
-import { setDisplayUsername } from '@/slices/auth';
+import { useRequest } from '@/utils';
 import { IRootState, IAppDispatch } from '@/utils/store';
+import { logout } from '@/api/logout';
+import { setRole, setUsername } from '@/slices/auth';
 import style from './style.module.less';
 import Logo from '@/images/books.png';
 import User from '@/images/user.png';
@@ -13,7 +15,7 @@ import User from '@/images/user.png';
 const HeaderBar: React.FC = () => {
   const history = useHistory();
 
-  const username = useSelector<IRootState>(({ auth }) => auth.displayUsername);
+  const username = useSelector<IRootState>(({ auth }) => auth.username);
   const dispatch = useDispatch<IAppDispatch>();
 
   return (
@@ -22,7 +24,7 @@ const HeaderBar: React.FC = () => {
         <img src={Logo} alt="" draggable={false} className={style.image} />
         LibSense
       </div>
-      {username !== '' && (
+      {username !== null && (
         <Dropdown
           overlay={
             <Menu>
@@ -30,8 +32,11 @@ const HeaderBar: React.FC = () => {
                 key="logout"
                 icon={<LogoutOutlined />}
                 onClick={() => {
-                  dispatch(setDisplayUsername(''));
-                  history.push('/Login');
+                  useRequest(logout()).then(() => {
+                    dispatch(setUsername(null));
+                    dispatch(setRole(null));
+                    history.push('/Login');
+                  });
                 }}
               >
                 Log Out

@@ -1,25 +1,32 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IRole } from '@/utils/interfaces';
 
 type IAuthState = {
-  displayUsername: string;
+  username: string;
+  role: IRole;
 };
 
 const initialState: IAuthState = {
-  displayUsername: '',
+  username: null,
+  role: null,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setDisplayUsername: (state, { payload }: PayloadAction<string>) => ({
+    setUsername: (state, { payload }: PayloadAction<string>) => ({
       ...state,
-      displayUsername: payload,
+      username: payload,
+    }),
+    setRole: (state, { payload }: PayloadAction<IRole>) => ({
+      ...state,
+      role: payload,
     }),
   },
 });
 
-const { setDisplayUsername } = authSlice.actions;
+const { setUsername, setRole } = authSlice.actions;
 const authReducer = authSlice.reducer;
 
-export { IAuthState, setDisplayUsername, authReducer };
+export { IAuthState, setUsername, setRole, authReducer };

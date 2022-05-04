@@ -11,7 +11,7 @@ type IGetDetailedCdlOrderResponse = IDetailedOrder;
 const getDetailedCdlOrder = async (
   params: IGetDetailedCdlOrderParams
 ): Promise<AxiosResponse<IGetDetailedCdlOrderResponse>> => {
-  return axios.get(`${urlPrefix}/v1/orders/cdl-orders/detail?bookId=${params.orderId}`);
+  return axios.get(`${urlPrefix}/v1/orders/cdl-orders/detail?bookId=${params.orderId}`, { withCredentials: true });
 };
 
 export { getDetailedCdlOrder, IGetDetailedCdlOrderParams, IGetDetailedCdlOrderResponse };

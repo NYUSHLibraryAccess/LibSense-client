@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { observer } from 'mobx-react';
-import { Button, Upload, Card, Result, Form, Divider, Space } from 'antd';
+import { Button, Upload, Card, Result, Form, Divider, Space, Typography } from 'antd';
 import { FileExcelOutlined } from '@ant-design/icons';
 import { UploadOutlined } from '@ant-design/icons';
 import { urlPrefix } from '@/utils/constants';
@@ -11,7 +11,7 @@ const FileUploader: React.FC = observer(() => {
   const [status, setStatus] = useState(false);
 
   return (
-    <Card>
+    <Card title={<Typography.Title level={4}>Upload Data</Typography.Title>}>
       {!status && (
         <Form>
           <Form.Item label="File">

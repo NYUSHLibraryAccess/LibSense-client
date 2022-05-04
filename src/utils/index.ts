@@ -5,6 +5,7 @@ import { AxiosResponse } from 'axios';
 import { autorun, reaction } from 'mobx';
 import { allTags } from '@/utils/constants';
 import { ITag } from '@/utils/interfaces';
+import { useHistory } from 'react-router-dom';
 
 // Side effect hook that runs only after the component is mounted
 export const useDidMountEffect = (effect: () => void, deps?: React.DependencyList): void => {
@@ -64,12 +65,12 @@ export const useReaction = <T>(
 };
 
 // Request wrapper with error handling
-export const requestWithCatch = async <T>(res: Promise<AxiosResponse<T>>): Promise<T> => {
+export const useRequest = async <T>(res: Promise<AxiosResponse<T>>): Promise<T> => {
   try {
-    const { data } = await res;
-    return data;
+    const r = await res;
+    return r.data;
   } catch (err) {
-    message.error(`Network request failed: ${err.message}`);
+    message.error(`${err.name}: ${err.message}`);
   }
 };
 

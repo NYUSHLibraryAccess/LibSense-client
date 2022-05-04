@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { requestWithCatch, sortTags, prioritizeNull } from '@/utils';
+import { sortTags, prioritizeNull } from '@/utils';
 import { IMetadata } from '@/utils/interfaces';
 import { IRootState } from '@/utils/store';
 import { getMetadata } from '@/api/getMetadata';
@@ -30,7 +30,7 @@ const fetchMetadata = createAsyncThunk<IMetadata, void, { state: IRootState }>(
     if (state.metadata.hasMetadata) {
       throw new Error();
     }
-    return requestWithCatch(getMetadata());
+    return (await getMetadata()).data;
   }
 );
 
@@ -40,6 +40,9 @@ const metadataSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchMetadata.fulfilled, (state, { payload }) => {
+      if (payload === undefined) {
+        return state;
+      }
       return {
         hasMetadata: true,
         metadata: {
