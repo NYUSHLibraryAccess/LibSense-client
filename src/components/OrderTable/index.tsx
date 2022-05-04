@@ -12,8 +12,8 @@ import { ColoredTag } from '@/components/ColoredTag';
 import style from './style.module.less';
 import { OrderModal } from '@/components/OrderModal';
 import { getDetailedOrder } from '@/api/getDetailedOrder';
-import { getAllCDLOrders } from '@/api/getAllCDLOrders';
-import { getDetailedCDLOrder } from '@/api/getDetailedCDLOrder';
+import { getAllCdlOrders } from '@/api/getAllCdlOrders';
+import { getDetailedCdlOrder } from '@/api/getDetailedCdlOrder';
 
 type IOrderWithKey = { key: number } & (IOrder | ICdlOrder);
 
@@ -95,7 +95,7 @@ const OrderTable: React.FC = () => {
             },
             filters,
           })
-        : getAllCDLOrders({
+        : getAllCdlOrders({
             pageIndex: currentPage - 1,
             pageSize,
             sorter: {
@@ -216,11 +216,11 @@ const OrderTable: React.FC = () => {
                   <Button
                     type="link"
                     disabled={(record as ICdlOrder).circPdfUrl === null}
-                    onClick={useCallback(() => {
+                    onClick={() => {
                       // Copy PDF URL to clipboard
-                      copy((record as ICdlOrder).circPdfUrl);
+                      copy((record as ICdlOrder)?.circPdfUrl);
                       message.success('Copied PDF URL to clipboard!');
-                    }, [])}
+                    }}
                   >
                     Copy PDF URL
                   </Button>
@@ -239,7 +239,7 @@ const OrderTable: React.FC = () => {
                         setModalData(r);
                       } else {
                         // CDL order
-                        r = await requestWithCatch(getDetailedCDLOrder({ orderId: record.id }));
+                        r = await requestWithCatch(getDetailedCdlOrder({ orderId: record.id }));
                         if (r !== undefined) {
                           setModalData(r);
                         }
@@ -266,6 +266,26 @@ const OrderTable: React.FC = () => {
         data={modalData}
         setData={setModalData}
         isCdl={isCdl}
+        onReload={async () => {
+          // Show order detail modal and request data
+          setModalData(undefined);
+          setIsModalLoading(true);
+          setIsModalVisible(true);
+          let r = await requestWithCatch(getDetailedOrder({ orderId: modalData.id }));
+          if (r !== undefined) {
+            if (!r.tags.includes('CDL')) {
+              // Ordinary order
+              setModalData(r);
+            } else {
+              // CDL order
+              r = await requestWithCatch(getDetailedCdlOrder({ orderId: modalData.id }));
+              if (r !== undefined) {
+                setModalData(r);
+              }
+            }
+          }
+          setIsModalLoading(false);
+        }}
       />
     </>
   );

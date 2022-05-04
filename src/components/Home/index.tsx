@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Card, Col, Image, Row, Statistic, Typography } from 'antd';
+import { Card, Col, Divider, Row, Statistic, Typography } from 'antd';
+import { HourglassTwoTone, StarTwoTone } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { IRootState } from '@/utils/store';
 import { IOverview } from '@/utils/interfaces';
@@ -33,11 +34,13 @@ const Home: React.FC = () => {
       </Col>
       <Col span={24}>
         <Card className={style.card}>
-          <Typography.Paragraph>Here are some statistics for you:</Typography.Paragraph>
+          <Typography.Paragraph>
+            <StarTwoTone /> Here are some statistics for you:
+          </Typography.Paragraph>
           <Typography.Paragraph>
             <ul>
               <li>
-                Pending Rush-Local orders: <Typography.Text strong>{overview.localRushPending}</Typography.Text>
+                Pending Rush-Local orders: <Typography.Text strong>{overview?.localRushPending}</Typography.Text>
               </li>
               <li>
                 New York Excel version: <Typography.Text strong>2022-04-19</Typography.Text>
@@ -50,65 +53,89 @@ const Home: React.FC = () => {
         </Card>
       </Col>
       {/* CDL Vendor Scanning Days */}
-      <Col span={24}>
-        <Card title={<Typography.Title level={5}>CDL Vendor Scanning Days</Typography.Title>}>
+      <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+        <Card
+          title={
+            <Typography.Title level={5}>
+              <HourglassTwoTone /> CDL Vendor Scanning Days
+            </Typography.Title>
+          }
+        >
           <Row gutter={16}>
             <Col span={8}>
-              <Statistic title="Average" className={style.avg} value={overview.avgCdlScan} suffix="Days" />
+              <Statistic title="Average" className={style.avg} value={overview?.avgCdlScan} suffix="Days" />
             </Col>
             <Col span={8}>
-              <Statistic title="Minimum" className={style.min} value={overview.minCdlScan} suffix="Days" />
+              <Statistic title="Minimum" className={style.min} value={overview?.minCdlScan} suffix="Days" />
             </Col>
             <Col span={8}>
-              <Statistic title="Maximum" className={style.max} value={overview.maxCdlScan} suffix="Days" />
+              <Statistic title="Maximum" className={style.max} value={overview?.maxCdlScan} suffix="Days" />
             </Col>
           </Row>
         </Card>
       </Col>
       {/* CDL Total Days */}
-      <Col span={24}>
-        <Card title={<Typography.Title level={5}>CDL Total Days</Typography.Title>}>
+      <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+        <Card
+          title={
+            <Typography.Title level={5}>
+              <HourglassTwoTone /> CDL Total Days
+            </Typography.Title>
+          }
+        >
           <Row gutter={16}>
             <Col span={8}>
-              <Statistic title="Average" className={style.avg} value={overview.avgCdl} suffix="Days" />
+              <Statistic title="Average" className={style.avg} value={overview?.avgCdl} suffix="Days" />
             </Col>
             <Col span={8}>
-              <Statistic title="Minimum" className={style.min} value={overview.minCdl} suffix="Days" />
+              <Statistic title="Minimum" className={style.min} value={overview?.minCdl} suffix="Days" />
             </Col>
             <Col span={8}>
-              <Statistic title="Maximum" className={style.max} value={overview.maxCdl} suffix="Days" />
+              <Statistic title="Maximum" className={style.max} value={overview?.maxCdl} suffix="Days" />
             </Col>
           </Row>
         </Card>
       </Col>
       {/* Rush-NY Total Days */}
-      <Col span={24}>
-        <Card title={<Typography.Title level={5}>Rush-NY Total Days</Typography.Title>}>
+      <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+        <Card
+          title={
+            <Typography.Title level={5}>
+              <HourglassTwoTone /> Rush-NY Total Days
+            </Typography.Title>
+          }
+        >
           <Row gutter={16}>
             <Col span={8}>
-              <Statistic title="Average" className={style.avg} value={overview.avgRushNyc} suffix="Days" />
+              <Statistic title="Average" className={style.avg} value={overview?.avgRushNyc} suffix="Days" />
             </Col>
             <Col span={8}>
-              <Statistic title="Minimum" className={style.min} value={overview.minRushNyc} suffix="Days" />
+              <Statistic title="Minimum" className={style.min} value={overview?.minRushNyc} suffix="Days" />
             </Col>
             <Col span={8}>
-              <Statistic title="Maximum" className={style.max} value={overview.maxRushNyc} suffix="Days" />
+              <Statistic title="Maximum" className={style.max} value={overview?.maxRushNyc} suffix="Days" />
             </Col>
           </Row>
         </Card>
       </Col>
       {/* Rush-Local Total Days */}
-      <Col span={24}>
-        <Card title={<Typography.Title level={5}>Rush-Local Total Days</Typography.Title>}>
+      <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+        <Card
+          title={
+            <Typography.Title level={5}>
+              <HourglassTwoTone /> Rush-Local Total Days
+            </Typography.Title>
+          }
+        >
           <Row gutter={16}>
             <Col span={8}>
-              <Statistic title="Average" className={style.avg} value={overview.avgRushLocal} suffix="Days" />
+              <Statistic title="Average" className={style.avg} value={overview?.avgRushLocal} suffix="Days" />
             </Col>
             <Col span={8}>
-              <Statistic title="Minimum" className={style.min} value={overview.minRushLocal} suffix="Days" />
+              <Statistic title="Minimum" className={style.min} value={overview?.minRushLocal} suffix="Days" />
             </Col>
             <Col span={8}>
-              <Statistic title="Maximum" className={style.max} value={overview.maxRushLocal} suffix="Days" />
+              <Statistic title="Maximum" className={style.max} value={overview?.maxRushLocal} suffix="Days" />
             </Col>
           </Row>
         </Card>

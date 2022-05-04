@@ -2,22 +2,22 @@ import axios, { AxiosResponse } from 'axios';
 import { urlPrefix } from '@/utils/constants';
 import { ICdlOrder, IFilter } from '@/utils/interfaces';
 
-type IGetAllCDLOrdersParams = {
+type IGetAllCdlOrdersParams = {
   pageIndex: number;
   pageSize: number;
   sorter?: { col: string; desc: boolean };
   filters?: IFilter[];
 };
 
-type IGetAllCDLOrdersResponse = {
+type IGetAllCdlOrdersResponse = {
   pageIndex: number;
   pageLimit: number;
   totalRecords: number;
   result: ICdlOrder[];
 };
 
-const getAllCDLOrders = async (params: IGetAllCDLOrdersParams): Promise<AxiosResponse<IGetAllCDLOrdersResponse>> => {
+const getAllCdlOrders = async (params: IGetAllCdlOrdersParams): Promise<AxiosResponse<IGetAllCdlOrdersResponse>> => {
   return axios.post(`${urlPrefix}/v1/orders/cdl-orders`, { ...params });
 };
 
-export { getAllCDLOrders, IGetAllCDLOrdersParams, IGetAllCDLOrdersResponse };
+export { getAllCdlOrders, IGetAllCdlOrdersParams, IGetAllCdlOrdersResponse };

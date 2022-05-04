@@ -2,10 +2,12 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Layout } from 'antd';
 import { HeaderBar } from '@/components/HeaderBar';
 import { NavigationMenu } from '@/components/NavigationMenu';
+import { Login } from '@/components/Login';
 import { Home } from '@/components/Home';
 import { OrderTable } from '@/components/OrderTable';
 import { FileUploader } from '@/components/FileUploader';
@@ -18,6 +20,7 @@ const App: React.FC = () => {
   return (
     <>
       <Helmet>
+        <title>LibSense</title>
         <link rel="icon" href={Favicon} />
       </Helmet>
       <Layout>
@@ -25,16 +28,21 @@ const App: React.FC = () => {
           <HeaderBar />
         </Layout.Header>
         <Layout className={style.pageBody}>
-          <Layout.Sider width={240} className={style.menu}>
-            <NavigationMenu />
-          </Layout.Sider>
+          <Switch>
+            <Route path="/Login" />
+            <Route>
+              <Layout.Sider width={240} className={style.menu}>
+                <NavigationMenu />
+              </Layout.Sider>
+            </Route>
+          </Switch>
           <Layout.Content>
             <div className={style.content}>
               <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/Orders" component={OrderTable} />
                 <Route path="/Upload" component={FileUploader} />
-                <Route path="*" component={PageNotFound} />
+                <Route component={PageNotFound} />
               </Switch>
             </div>
           </Layout.Content>

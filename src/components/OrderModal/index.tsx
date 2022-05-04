@@ -1,17 +1,39 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Input, Modal, Row, Col, Spin, Space, Button, Tooltip, Typography, Card, Select } from 'antd';
+import {
+  Form,
+  Input,
+  Modal,
+  Row,
+  Col,
+  Spin,
+  Space,
+  Button,
+  Tooltip,
+  Typography,
+  Card,
+  Select,
+  DatePicker,
+  message,
+} from 'antd';
 import { TextAreaProps } from 'antd/es/input';
-import { PlusOutlined, LockOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, LockOutlined } from '@ant-design/icons';
+import moment from 'moment';
 import { IAppDispatch, IRootState } from '@/utils/store';
 import { IDetailedCdlOrder, IDetailedOrder, IMetadata } from '@/utils/interfaces';
 import { fetchMetadata } from '@/slices/metadata';
 import style from './style.module.less';
+import { requestWithCatch } from '@/utils';
+import { addCdlOrder } from '@/api/addCdlOrder';
+import { removeCdlOrder } from '@/api/removeCdlOrder';
+import { updateCdlOrder } from '@/api/updateCdlOrder';
 
 const textAreaAutoSize: Pick<TextAreaProps, 'autoSize'> = { autoSize: { minRows: 1, maxRows: 3 } };
+const dateFormat = 'YYYY-MM-DD';
 
 // TODO: add modification indicator
+
 const OrderModal: React.FC<{
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,7 +41,8 @@ const OrderModal: React.FC<{
   data: IDetailedOrder | IDetailedCdlOrder;
   setData: React.Dispatch<React.SetStateAction<IDetailedOrder | IDetailedCdlOrder>>;
   isCdl: boolean;
-}> = ({ visible, setVisible, isLoading, data, setData, isCdl }) => {
+  onReload: () => void;
+}> = ({ visible, setVisible, isLoading, data, setData, isCdl, onReload }) => {
   const dispatch = useDispatch<IAppDispatch>();
 
   // Metadata states
@@ -36,7 +59,28 @@ const OrderModal: React.FC<{
       visible={visible}
       className={style.modal}
       onOk={() => {
-        setVisible(true);
+        requestWithCatch(
+          updateCdlOrder({
+            bookId: data.id,
+            author: (data as IDetailedCdlOrder)?.author,
+            backToKarmsDate: (data as IDetailedCdlOrder)?.backToKarmsDate,
+            bobcatPermanentLink: (data as IDetailedCdlOrder)?.bobcatPermanentLink,
+            cdlItemStatus: (data as IDetailedCdlOrder)?.cdlItemStatus,
+            circPdfUrl: (data as IDetailedCdlOrder)?.circPdfUrl,
+            dueDate: (data as IDetailedCdlOrder)?.dueDate,
+            filePassword: (data as IDetailedCdlOrder)?.filePassword,
+            orderPurchasedDate: (data as IDetailedCdlOrder)?.orderPurchasedDate,
+            orderRequestDate: (data as IDetailedCdlOrder)?.orderPurchasedDate,
+            pages: (data as IDetailedCdlOrder)?.pages,
+            pdfDeliveryDate: (data as IDetailedCdlOrder)?.pdfDeliveryDate,
+            physicalCopyStatus: (data as IDetailedCdlOrder)?.physicalCopyStatus,
+            scanningVendorPaymentDate: (data as IDetailedCdlOrder)?.scanningVendorPaymentDate,
+            vendorFileUrl: (data as IDetailedCdlOrder)?.vendorFileUrl,
+          })
+        ).then(() => {
+          message.success('Successfully updated order!');
+          setVisible(false);
+        });
       }}
       onCancel={() => {
         setVisible(false);
@@ -153,11 +197,11 @@ const OrderModal: React.FC<{
                             value: item,
                             label: item !== null ? item : '(Empty)',
                           }))}
-                          value={(data as IDetailedCdlOrder)?.cdlItemStatus}
+                          value={(data as IDetailedCdlOrder)?.cdlItemStatus[0]}
                           onChange={(value) => {
                             setData({
                               ...data,
-                              cdlItemStatus: value,
+                              cdlItemStatus: [value],
                             });
                           }}
                         />
@@ -176,6 +220,156 @@ const OrderModal: React.FC<{
                             setData({
                               ...data,
                               physicalCopyStatus: value,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Order Request Date */}
+                    <Col span={12}>
+                      <Form.Item label="Order Request Date">
+                        <DatePicker
+                          className={style.datePicker}
+                          format={dateFormat}
+                          value={
+                            (data as IDetailedCdlOrder).orderRequestDate !== null
+                              ? moment((data as IDetailedCdlOrder).orderRequestDate)
+                              : null
+                          }
+                          onChange={(value) => {
+                            setData({
+                              ...data,
+                              orderRequestDate: value !== null ? value.format(dateFormat) : null,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Scanning Vendor Payment Date */}
+                    <Col span={12}>
+                      <Form.Item label="Scanning Vendor Payment Date">
+                        <DatePicker
+                          className={style.datePicker}
+                          format={dateFormat}
+                          value={
+                            (data as IDetailedCdlOrder).scanningVendorPaymentDate !== null
+                              ? moment((data as IDetailedCdlOrder).scanningVendorPaymentDate)
+                              : null
+                          }
+                          onChange={(value) => {
+                            setData({
+                              ...data,
+                              scanningVendorPaymentDate: value !== null ? value.format(dateFormat) : null,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* PDF Delivery Date */}
+                    <Col span={12}>
+                      <Form.Item label="PDF Delivery Date">
+                        <DatePicker
+                          className={style.datePicker}
+                          format={dateFormat}
+                          value={
+                            (data as IDetailedCdlOrder).pdfDeliveryDate !== null
+                              ? moment((data as IDetailedCdlOrder).pdfDeliveryDate)
+                              : null
+                          }
+                          onChange={(value) => {
+                            setData({
+                              ...data,
+                              pdfDeliveryDate: value !== null ? value.format(dateFormat) : null,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Back to KARMS Date */}
+                    <Col span={12}>
+                      <Form.Item label="Back to KARMS Date">
+                        <DatePicker
+                          className={style.datePicker}
+                          format={dateFormat}
+                          value={
+                            (data as IDetailedCdlOrder).backToKarmsDate !== null
+                              ? moment((data as IDetailedCdlOrder).backToKarmsDate)
+                              : null
+                          }
+                          onChange={(value) => {
+                            setData({
+                              ...data,
+                              backToKarmsDate: value !== null ? value.format(dateFormat) : null,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Order Purchase Date */}
+                    <Col span={12}>
+                      <Form.Item label="Order Purchase Date">
+                        <DatePicker
+                          className={style.datePicker}
+                          format={dateFormat}
+                          value={
+                            (data as IDetailedCdlOrder).orderPurchasedDate !== null
+                              ? moment((data as IDetailedCdlOrder).orderPurchasedDate)
+                              : null
+                          }
+                          onChange={(value) => {
+                            setData({
+                              ...data,
+                              orderPurchasedDate: value !== null ? value.format(dateFormat) : null,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Due Date */}
+                    <Col span={12}>
+                      <Form.Item label="Due Date">
+                        <DatePicker
+                          className={style.datePicker}
+                          format={dateFormat}
+                          value={
+                            (data as IDetailedCdlOrder).dueDate !== null
+                              ? moment((data as IDetailedCdlOrder).dueDate)
+                              : null
+                          }
+                          onChange={(value) => {
+                            setData({
+                              ...data,
+                              dueDate: value !== null ? value.format(dateFormat) : null,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Author Input */}
+                    <Col span={12}>
+                      <Form.Item label="Author">
+                        <Input.TextArea
+                          {...textAreaAutoSize}
+                          value={(data as IDetailedCdlOrder)?.author}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              author: e.target.value,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* Pages Input */}
+                    <Col span={12}>
+                      <Form.Item label="Pages">
+                        <Input.TextArea
+                          {...textAreaAutoSize}
+                          value={(data as IDetailedCdlOrder)?.pages}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              pages: e.target.value,
                             });
                           }}
                         />
@@ -264,17 +458,47 @@ const OrderModal: React.FC<{
           {/* Buttons */}
           <Col span={24}>
             <Space className={style.buttons}>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => {
-                  Modal.confirm({
-                    title: 'Register as CDL Order',
-                    content: 'Confirm to register this order as a CDL order?',
-                  });
-                }}
-              >
-                Register as CDL
-              </Button>
+              {!data?.tags.includes('CDL') ? (
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    Modal.confirm({
+                      title: 'Register as CDL Order',
+                      content: 'Confirm to register this order as a CDL order?',
+                      onOk: () => {
+                        requestWithCatch(addCdlOrder({ orderId: data.id })).then((r) => {
+                          if (r !== undefined) {
+                            message.success('Successfully added CDL order!');
+                            onReload();
+                          }
+                        });
+                      },
+                    });
+                  }}
+                >
+                  Register as CDL
+                </Button>
+              ) : (
+                <Button
+                  icon={<MinusOutlined />}
+                  onClick={() => {
+                    Modal.confirm({
+                      title: 'Remove CDL Order',
+                      content: 'Confirm to remove this order from CDL order list?',
+                      onOk: () => {
+                        requestWithCatch(removeCdlOrder({ orderId: data.id })).then((r) => {
+                          if (r !== undefined) {
+                            message.success('Successfully removed CDL order!');
+                            onReload();
+                          }
+                        });
+                      },
+                    });
+                  }}
+                >
+                  Remove CDL
+                </Button>
+              )}
             </Space>
           </Col>
         </Row>
