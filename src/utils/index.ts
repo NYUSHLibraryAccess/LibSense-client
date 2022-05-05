@@ -3,9 +3,9 @@ import { useEffect, useRef } from 'react';
 import { message } from 'antd';
 import { AxiosResponse } from 'axios';
 import { autorun, reaction } from 'mobx';
+import sha256 from 'crypto-js/sha256';
 import { allTags } from '@/utils/constants';
 import { ITag } from '@/utils/interfaces';
-import { useHistory } from 'react-router-dom';
 
 // Side effect hook that runs only after the component is mounted
 export const useDidMountEffect = (effect: () => void, deps?: React.DependencyList): void => {
@@ -80,3 +80,6 @@ export const sortTags = (tags: ITag[]): ITag[] =>
 
 // Prioritize empty values in the list
 export const prioritizeNull = <T>(items: T[]): T[] => items.sort((a, b) => (a === null ? 0 : 1) - (b === null ? 0 : 1));
+
+// Get SHA256 hash of string
+export const getHash = (msg: string): string => sha256(msg).toString();

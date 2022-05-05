@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Button, Card, Form, Input, message, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { sha256 } from 'crypto-hash';
+import { getHash } from '@/utils';
 import { IAppDispatch } from '@/utils/store';
 import { login } from '@/api/login';
 import style from './style.module.less';
@@ -27,7 +27,7 @@ const Login: React.FC = () => {
             try {
               const { data } = await login({
                 username,
-                password: await sha256(password),
+                password: getHash(password),
               });
               dispatch(setUsername(data.username));
               dispatch(setRole(data.role));

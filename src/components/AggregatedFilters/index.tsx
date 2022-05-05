@@ -21,7 +21,6 @@ import { CheckOutlined, FilterOutlined, UndoOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
 import { assign, isEqual } from 'lodash';
 import { useDidMountEffect, useReaction } from '@/utils';
-import { allTags } from '@/utils/constants';
 import { IRootState, IAppDispatch } from '@/utils/store';
 import { IFilter, ITag, IMetadata } from '@/utils/interfaces';
 import { fetchMetadata } from '@/slices/metadata';

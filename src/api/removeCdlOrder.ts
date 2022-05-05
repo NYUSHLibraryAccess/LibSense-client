@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
 import { urlPrefix } from '@/utils/constants';
-import { IDetailedOrder } from '@/utils/interfaces';
 
 // TODO: rename remove to delete
 type IRemoveCdlOrderParams = {

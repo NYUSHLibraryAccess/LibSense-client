@@ -42,7 +42,7 @@ const OrderModal: React.FC<{
   setData: React.Dispatch<React.SetStateAction<IDetailedOrder | IDetailedCdlOrder>>;
   isCdl: boolean;
   onReload: () => void;
-}> = ({ visible, setVisible, isLoading, data, setData, isCdl, onReload }) => {
+}> = ({ visible, setVisible, isLoading, data, setData, onReload }) => {
   const dispatch = useDispatch<IAppDispatch>();
 
   // Metadata states
@@ -425,21 +425,6 @@ const OrderModal: React.FC<{
                       <Form.Item labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="File Password">
                         <Input.TextArea
                           {...textAreaAutoSize}
-                          value={(data as IDetailedCdlOrder)?.filePassword}
-                          onChange={(e) => {
-                            setData({
-                              ...data,
-                              filePassword: e.target.value,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                    </Col>
-                    {/* Tracking Note */}
-                    <Col span={24}>
-                      <Form.Item labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Tracking Note">
-                        <Input.TextArea
-                          rows={2}
                           value={(data as IDetailedCdlOrder)?.filePassword}
                           onChange={(e) => {
                             setData({

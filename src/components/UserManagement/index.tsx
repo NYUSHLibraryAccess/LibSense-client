@@ -1,22 +1,30 @@
 import * as React from 'react';
-import { Avatar, Button, Card, Col, Collapse, Form, Input, message, Modal, Row, Select, Space, Typography } from 'antd';
 import { useEffect, useState } from 'react';
-import { useRequest } from '@/utils';
+import { useSelector } from 'react-redux';
+import { Avatar, Button, Card, Col, Collapse, Form, Input, message, Modal, Row, Select, Space, Typography } from 'antd';
+import { getHash, useRequest } from '@/utils';
 import { IRole } from '@/utils/interfaces';
+import { IRootState } from '@/utils/store';
 import { listUsers } from '@/api/listUsers';
 import { removeUser } from '@/api/removeUser';
 import { addUser } from '@/api/addUser';
 
-const User: React.FC<{ username: string; role: IRole; onRemove: () => void }> = ({ username, role, onRemove }) => {
+const User: React.FC<{
+  username: string;
+  role: IRole;
+  onRemove: () => void;
+  allowRemove: boolean;
+}> = ({ username, role, onRemove, allowRemove }) => {
   return (
-    <Card className={style.card}>
+    <Card>
       <Space direction="horizontal" size={20}>
-        <Avatar style={{ backgroundColor: '#00cbd0' }}>{username?.slice(0, 1).toUpperCase()}</Avatar>
+        <Avatar style={{ backgroundColor: '#d08700' }}>{username?.slice(0, 1).toUpperCase()}</Avatar>
         <Space direction="vertical">
           <strong>{username}</strong>
           <span>{role}</span>
           <Button
             size="small"
+            disabled={!allowRemove}
             onClick={() => {
               Modal.confirm({
                 title: `Delete user ${username}`,
@@ -34,6 +42,8 @@ const User: React.FC<{ username: string; role: IRole; onRemove: () => void }> = 
 };
 
 const UserManagement: React.FC = () => {
+  const username = useSelector<IRootState>(({ auth }) => auth.username);
+
   const [users, setUsers] = useState<{ username: string; role: IRole }[]>([]);
   const [form] = Form.useForm();
 
@@ -53,6 +63,7 @@ const UserManagement: React.FC = () => {
             <User
               username={user?.username}
               role={user?.role}
+              allowRemove={username !== user?.username}
               onRemove={() => {
                 useRequest(
                   removeUser({
@@ -79,8 +90,14 @@ const UserManagement: React.FC = () => {
                 form={form}
                 labelCol={{ span: 6 }}
                 wrapperCol={{ span: 18 }}
-                onFinish={(values) => {
-                  useRequest(addUser(values)).then((r) => {
+                onFinish={async (values) => {
+                  useRequest(
+                    addUser({
+                      username: values.username,
+                      role: values.role,
+                      password: getHash(values.password),
+                    })
+                  ).then((r) => {
                     if (r !== undefined) {
                       Modal.success({
                         title: 'Success',

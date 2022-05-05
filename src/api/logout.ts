@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
 import { urlPrefix } from '@/utils/constants';
-import { IRole } from '@/utils/interfaces';
 
 type ILogoutResponse = {
   msg: string;

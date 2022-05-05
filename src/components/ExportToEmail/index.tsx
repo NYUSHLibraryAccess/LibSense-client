@@ -1,10 +1,12 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { Modal, Card, Form, Select, Button, Input, Typography, Space } from 'antd';
 import { useRequest } from '@/utils';
 import { exportToEmail } from '@/api/exportToEmail';
 
 const ExportToEmail: React.FC = () => {
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Card title={<Typography.Title level={4}>Export to E-mail</Typography.Title>}>
@@ -13,7 +15,7 @@ const ExportToEmail: React.FC = () => {
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
         onFinish={(values) => {
-          console.log(values);
+          setIsLoading(true);
           useRequest(
             exportToEmail({
               reportType: typeof values.reportType === 'string' ? [values.reportType] : values.reportType,
@@ -27,6 +29,7 @@ const ExportToEmail: React.FC = () => {
                 content: 'Exported data to e-mail successfully!',
               });
             }
+            setIsLoading(false);
           });
         }}
       >
@@ -49,7 +52,7 @@ const ExportToEmail: React.FC = () => {
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
           <Space>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={isLoading}>
               Send
             </Button>
             <Button

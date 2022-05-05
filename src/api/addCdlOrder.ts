@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
 import { urlPrefix } from '@/utils/constants';
-import { ICdlOrder, IDetailedCdlOrder, IDetailedOrder, IOrder } from '@/utils/interfaces';
 
 type IAddCdlOrderParams = {
   orderId: number;

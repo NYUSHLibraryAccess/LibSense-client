@@ -29,7 +29,7 @@ const config = require('../webpack.config');
     host: env.HOST,
     port: env.PORT,
     proxy: {
-      '/v1': 'http://dev.libsense:8081'
+      '/v1': 'http://dev.libsense.com:8081'
     }
   }, compiler);
 

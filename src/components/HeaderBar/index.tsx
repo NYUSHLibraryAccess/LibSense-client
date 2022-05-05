@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Dropdown, Menu } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
@@ -10,12 +9,11 @@ import { logout } from '@/api/logout';
 import { setRole, setUsername } from '@/slices/auth';
 import style from './style.module.less';
 import Logo from '@/images/books.png';
-import User from '@/images/user.png';
 
 const HeaderBar: React.FC = () => {
   const history = useHistory();
 
-  const username = useSelector<IRootState>(({ auth }) => auth.username);
+  const username = useSelector<IRootState, string>(({ auth }) => auth.username);
   const dispatch = useDispatch<IAppDispatch>();
 
   return (
@@ -46,7 +44,9 @@ const HeaderBar: React.FC = () => {
           overlayClassName={style.userOverlay}
         >
           <a className={style.user}>
-            <Avatar src={<img src={User} alt="" draggable={false} />} className={style.avatar} />
+            <Avatar className={style.avatar} style={{ backgroundColor: '#d08700' }}>
+              {username?.slice(0, 1).toUpperCase()}
+            </Avatar>
             {username}
           </a>
         </Dropdown>

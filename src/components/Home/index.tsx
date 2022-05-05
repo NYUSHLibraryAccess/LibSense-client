@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Card, Col, Divider, Row, Statistic, Typography } from 'antd';
+import { Card, Col, Row, Statistic, Typography } from 'antd';
 import { HourglassTwoTone, StarTwoTone } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { IRootState } from '@/utils/store';
@@ -12,18 +12,9 @@ import style from './style.module.less';
 import { useHistory } from 'react-router-dom';
 
 const Home: React.FC = () => {
-  const history = useHistory();
-
   const username = useSelector<IRootState, string>(({ auth }) => auth.username);
 
   const [overview, setOverview] = useState<IOverview>();
-
-  useEffect(() => {
-    // TODO: check the order between dispatch redux action and router re-rendering, does this hook work?
-    if (username === null) {
-      history.push('/Login');
-    }
-  }, []);
 
   // TODO: add subscription check
   useEffect(() => {
