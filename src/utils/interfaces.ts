@@ -19,7 +19,7 @@ export type IOverview = {
   minRushLocal: number;
 };
 
-export type ITag = 'Rush' | 'Non-Rush' | 'CDL' | 'Local' | 'NYC' | 'Course-Reserve' | 'DVD' | 'ILL' | 'Sensitive';
+export type ITag = 'Rush' | 'Non-Rush' | 'CDL' | 'Local' | 'NY' | 'Reserve' | 'DVD' | 'ILL' | 'Sensitive';
 
 export type IMetadata = {
   ipsCode: string[];

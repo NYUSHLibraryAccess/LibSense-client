@@ -3,16 +3,17 @@ import { useEffect, useState } from 'react';
 import { Card, Col, Row, Statistic, Typography } from 'antd';
 import { HourglassTwoTone, StarTwoTone } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { IRootState } from '@/utils/store';
 import { IOverview } from '@/utils/interfaces';
 import Welcome from '@/images/welcome-back.png';
 import { useRequest } from '@/utils';
 import { getOverview } from '@/api/getOverview';
 import style from './style.module.less';
-import { useHistory } from 'react-router-dom';
 
 const Home: React.FC = () => {
   const username = useSelector<IRootState, string>(({ auth }) => auth.username);
+  const history = useHistory();
 
   const [overview, setOverview] = useState<IOverview>();
 
@@ -42,11 +43,26 @@ const Home: React.FC = () => {
           <Typography.Paragraph>
             <ul>
               <li>
-                <Typography.Text strong>{overview?.localRushPending || 0}</Typography.Text> Rush-Local orders pending to
-                be checked.
+                <span
+                  className={style.clickable}
+                  onClick={() => {
+                    history.push('/Orders/Local');
+                  }}
+                >
+                  <Typography.Text strong>{overview?.localRushPending || 0}</Typography.Text> Rush-Local orders pending
+                  to be checked.
+                </span>
               </li>
               <li>
-                <Typography.Text strong>{overview?.cdlPending || 0}</Typography.Text> CDL orders pending to be checked.
+                <span
+                  className={style.clickable}
+                  onClick={() => {
+                    history.push('/Orders/CDL');
+                  }}
+                >
+                  <Typography.Text strong>{overview?.cdlPending || 0}</Typography.Text> CDL orders pending to be
+                  checked.
+                </span>
               </li>
             </ul>
           </Typography.Paragraph>

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Card, message, Space, Table, Typography } from 'antd';
 import copy from 'copy-to-clipboard';
-import { useRequest, sortTags, useDidMountEffect, useIsSubscribed } from '@/utils';
+import { sortTags, useDidMountEffect, useIsSubscribed, useRequest } from '@/utils';
 import { ICdlOrder, IColumn, IDetailedCdlOrder, IDetailedOrder, IFilter, IOrder, ITag } from '@/utils/interfaces';
 import { getAllOrders } from '@/api/getAllOrders';
 import { ColumnSelector, getColumnName, getDefaultColumns } from '@/components/ColumnSelector';
@@ -15,7 +15,7 @@ import { getDetailedOrder } from '@/api/getDetailedOrder';
 import { getAllCdlOrders } from '@/api/getAllCdlOrders';
 import { getDetailedCdlOrder } from '@/api/getDetailedCdlOrder';
 
-type IOrderWithKey = { key: number } & (IOrder | ICdlOrder);
+type IExpandedOrder = { key: number } & (IOrder | ICdlOrder);
 
 const mapPathToIsCdl: Record<string, boolean> = {
   '/': false,
@@ -35,10 +35,10 @@ const mapPathToDefaultTagsToFilter: Record<string, ITag[]> = {
   '/Orders/All': [],
   '/Orders/Rush': ['Rush'],
   '/Orders/CDL': [],
-  '/Orders/NYC': ['NYC'],
+  '/Orders/NYC': ['NY'],
   '/Orders/Local': ['Local'],
   '/Orders/DVD': ['DVD'],
-  '/Orders/Course-Reserve': ['Course-Reserve'],
+  '/Orders/Course-Reserve': ['Reserve'],
   '/Orders/ILL': ['ILL'],
   '/Orders/Non-Rush': ['Non-Rush'],
   '/Orders/Sensitive': ['Sensitive'],
@@ -66,7 +66,7 @@ const OrderTable: React.FC = () => {
 
   // Table states
   const [isTableLoading, setIsTableLoading] = useState(true);
-  const [tableData, setTableData] = useState<IOrderWithKey[]>([]);
+  const [tableData, setTableData] = useState<IExpandedOrder[]>([]);
   const [requestInfo, setRequestInfo] = useState({ displayCount: 0, totalCount: 0, time: 0 });
 
   // Modal states
@@ -116,7 +116,9 @@ const OrderTable: React.FC = () => {
           time: (performance.now() - startTime) / 1000,
         });
         // Update table data
-        setTableData(response.result.map((item) => ({ ...item, key: item.id })));
+        setTableData(
+          response.result.map((item, index) => ({ ...item, key: (currentPage - 1) * pageSize + index + 1 }))
+        );
         // Update the total number of records, avoid 0 because it will hide pagination control
         setTotalRecords(response.totalRecords > 0 ? response.totalRecords : 1);
       }
@@ -145,7 +147,7 @@ const OrderTable: React.FC = () => {
             }, [])}
           />
         </Space>
-        <Table<IOrderWithKey>
+        <Table<IExpandedOrder>
           bordered
           size="small"
           scroll={{ x: 'auto' }}
@@ -174,7 +176,14 @@ const OrderTable: React.FC = () => {
             setSorterOrder(sorter.order !== undefined ? sorter.order : 'ascend');
           }}
         >
-          <Table.Column<IOrderWithKey>
+          <Table.Column<IExpandedOrder>
+            key="number"
+            dataIndex="key"
+            title="No."
+            ellipsis
+            render={(text, record) => <span>{record.key}</span>}
+          />
+          <Table.Column<IExpandedOrder>
             key="tags"
             dataIndex="tags"
             title="Tags"
@@ -188,7 +197,7 @@ const OrderTable: React.FC = () => {
             )}
           />
           {columns.map((column) => (
-            <Table.Column<IOrderWithKey>
+            <Table.Column<IExpandedOrder>
               key={column}
               dataIndex={column}
               title={getColumnName(isCdl, column)}
@@ -206,7 +215,7 @@ const OrderTable: React.FC = () => {
               }
             />
           ))}
-          <Table.Column<IOrderWithKey>
+          <Table.Column<IExpandedOrder>
             key="actions"
             title="Actions"
             fixed="right"

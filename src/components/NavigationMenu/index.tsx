@@ -69,13 +69,13 @@ const NavigationMenu: React.FC = () => {
           CDL Orders
         </Menu.Item>
         <Menu.Item key="nyOrders" icon={<BookOutlined />}>
-          NY Orders
+          Rush-NY Orders
         </Menu.Item>
         <Menu.Item key="localOrders" icon={<BookOutlined />}>
-          Local Orders
+          Rush-Local Orders
         </Menu.Item>
         <Menu.Item key="dvdOrders" icon={<BookOutlined />}>
-          DVD Orders
+          Rush-DVD Orders
         </Menu.Item>
         <Menu.Item key="courseReserveOrders" icon={<BookOutlined />}>
           Course Reserve Orders

@@ -325,56 +325,6 @@ const OrderModal: React.FC<{
                         />
                       </Form.Item>
                     </Col>
-                    {/* Due Date */}
-                    <Col span={12}>
-                      <Form.Item label="Due Date">
-                        <DatePicker
-                          className={style.datePicker}
-                          format={dateFormat}
-                          value={
-                            (data as IDetailedCdlOrder).dueDate !== null
-                              ? moment((data as IDetailedCdlOrder).dueDate)
-                              : null
-                          }
-                          onChange={(value) => {
-                            setData({
-                              ...data,
-                              dueDate: value !== null ? value.format(dateFormat) : null,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                    </Col>
-                    {/* Author Input */}
-                    <Col span={12}>
-                      <Form.Item label="Author">
-                        <Input.TextArea
-                          {...textAreaAutoSize}
-                          value={(data as IDetailedCdlOrder)?.author}
-                          onChange={(e) => {
-                            setData({
-                              ...data,
-                              author: e.target.value,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                    </Col>
-                    {/* Pages Input */}
-                    <Col span={12}>
-                      <Form.Item label="Pages">
-                        <Input.TextArea
-                          {...textAreaAutoSize}
-                          value={(data as IDetailedCdlOrder)?.pages}
-                          onChange={(e) => {
-                            setData({
-                              ...data,
-                              pages: e.target.value,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                    </Col>
                     {/* BobCat Permanent Link */}
                     <Col span={24}>
                       <Form.Item labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="BobCat Permanent Link">

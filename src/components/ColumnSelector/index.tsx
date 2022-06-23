@@ -19,7 +19,6 @@ const defaultData: IColumnSelectorRecord[] = [
   { key: 'createdDate', checked: true, name: 'Created Date' },
   { key: 'arrivalDate', checked: true, name: 'Arrival Date' },
   { key: 'ipsCode', checked: true, name: 'IPS Code' },
-  { key: 'ips', checked: true, name: 'IPS' },
   { key: 'ipsDate', checked: true, name: 'IPS Date' },
   { key: 'vendorCode', checked: true, name: 'Vendor Code' },
   { key: 'libraryNote', checked: true, name: 'Library Note' },

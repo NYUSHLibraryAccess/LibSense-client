@@ -29,8 +29,11 @@ const config = require('../webpack.config');
     host: env.HOST,
     port: env.PORT,
     proxy: {
-      '/v1': 'http://dev.libsense.com:8081'
-    }
+      '/api': {
+        target: "https://libsense.shanghai.nyu.edu",
+        secure: false,
+      },
+    },
   }, compiler);
 
   await server.start();
