@@ -35,9 +35,9 @@ const mapPathToDefaultTagsToFilter: Record<string, ITag[]> = {
   '/Orders/All': [],
   '/Orders/Rush': ['Rush'],
   '/Orders/CDL': [],
-  '/Orders/NYC': ['NY'],
-  '/Orders/Local': ['Local'],
-  '/Orders/DVD': ['DVD'],
+  '/Orders/NYC': ['Rush', 'NY'],
+  '/Orders/Local': ['Rush', 'Local'],
+  '/Orders/DVD': ['Rush', 'DVD'],
   '/Orders/Course-Reserve': ['Reserve'],
   '/Orders/ILL': ['ILL'],
   '/Orders/Non-Rush': ['Non-Rush'],
@@ -75,13 +75,14 @@ const OrderTable: React.FC = () => {
   const [modalData, setModalData] = useState<IDetailedOrder | IDetailedCdlOrder>();
 
   // Update `isCdl` and `defaultTagsToFilter` when path changes
-  useDidMountEffect(() => {
+  useEffect(() => {
+    console.log('post path change');
     setIsCdl(mapPathToIsCdl[location.pathname]);
     setDefaultTagsToFilter(mapPathToDefaultTagsToFilter[location.pathname]);
   }, [location.pathname]);
 
   // Update table data when filters, sorter, or pagination is changed
-  useEffect(() => {
+  useDidMountEffect(() => {
     setIsTableLoading(true);
     const startTime = performance.now();
     useRequest(
@@ -141,6 +142,7 @@ const OrderTable: React.FC = () => {
             isCdl={isCdl}
             defaultTagsToFilter={defaultTagsToFilter}
             onChange={useCallback((data) => {
+              console.log('AF onChange', data);
               setFilters(data);
               // Set pagination to the first page
               setCurrentPage(1);

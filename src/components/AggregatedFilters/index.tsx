@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { observable, runInAction, computed, toJS } from 'mobx';
+import { useDispatch, useSelector } from 'react-redux';
+import { autorun, computed, observable, runInAction, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import {
   Badge,
@@ -20,9 +20,9 @@ import { RangePickerProps } from 'antd/es/date-picker';
 import { CheckOutlined, FilterOutlined, UndoOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
 import { assign, isEqual } from 'lodash';
-import { useDidMountEffect, useReaction } from '@/utils';
-import { IRootState, IAppDispatch } from '@/utils/store';
-import { IFilter, ITag, IMetadata } from '@/utils/interfaces';
+import { useDidMountEffect } from '@/utils';
+import { IAppDispatch, IRootState } from '@/utils/store';
+import { IFilter, IMetadata, ITag } from '@/utils/interfaces';
 import { fetchMetadata } from '@/slices/metadata';
 import { ColoredTag } from '@/components/ColoredTag';
 import style from './style.module.less';
@@ -206,12 +206,9 @@ const AggregatedFilters: React.FC<{
   }, [isCdl, defaultTagsToFilter]);
 
   // Side effect hook that runs when filters are updated
-  useReaction(
-    () => filters.get(),
-    (filters) => {
-      onChange(filters);
-    }
-  );
+  autorun(() => {
+    onChange(filters.get());
+  });
 
   return (
     <Popover
