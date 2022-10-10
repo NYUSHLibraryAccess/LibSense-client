@@ -238,7 +238,7 @@ const ExpandCollapseItem: React.FC = () => {
 };
 
 const NavMenu: React.FC = () => {
-  useRequireAuthStatus(true);
+  const { isFetchingAuthStatus } = useRequireAuthStatus(true);
   const location = useLocation();
   const dispatch = useAppDispatch();
 
@@ -258,7 +258,9 @@ const NavMenu: React.FC = () => {
     }
   }, [location]);
 
-  return (
+  return isFetchingAuthStatus ? (
+    <Loading />
+  ) : (
     <div className="h-screen flex">
       <NavMenuContext.Provider value={contextValue}>
         <div className="flex-none">

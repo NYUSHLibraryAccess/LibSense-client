@@ -5,7 +5,7 @@ import { useWhoAmIQuery } from '@/services/auth';
 
 const useRequireAuthStatus = (requiredAuthStatus?: boolean, redirectTo?: string) => {
   const navigate = useNavigate();
-  const { isSuccess, isError, error, refetch } = useWhoAmIQuery();
+  const { isFetching, isSuccess, isError, error, refetch } = useWhoAmIQuery();
 
   useEffect(() => {
     if (isSuccess && requiredAuthStatus === false) {
@@ -19,7 +19,7 @@ const useRequireAuthStatus = (requiredAuthStatus?: boolean, redirectTo?: string)
     }
   }, [isError, error]);
 
-  return { refetchAuthStatus: refetch };
+  return { isFetchingAuthStatus: isFetching, refetchAuthStatus: refetch };
 };
 
 export { useRequireAuthStatus };
