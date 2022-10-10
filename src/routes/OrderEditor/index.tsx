@@ -127,46 +127,44 @@ const CdlButton: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { refetchAllOrders } = useContext(OrderTableContext);
   const { cachedOrderDetail } = useContext(OrderEditorContext);
-  const [
-    createCdl,
-    { isLoading: isCreateCdlLoading, isSuccess: isCreateCdlSuccess, isError: isCreateCdlError, reset: resetCreateCdl },
-  ] = useCreateCdlMutation();
-  const [
-    deleteCdl,
-    { isLoading: isDeleteCdlLoading, isSuccess: isDeleteCdlSuccess, isError: isDeleteCdlError, reset: resetDeleteCdl },
-  ] = useDeleteCdlMutation();
+  const [createCdl, { isLoading: isCreateCdlLoading, isSuccess: isCreateCdlSuccess, isError: isCreateCdlError }] =
+    useCreateCdlMutation();
+  const [deleteCdl, { isLoading: isDeleteCdlLoading, isSuccess: isDeleteCdlSuccess, isError: isDeleteCdlError }] =
+    useDeleteCdlMutation();
 
   useEffect(() => {
-    if (isCreateCdlSuccess && searchParams.get('cdl') !== 'true') {
-      message.success('Created CDL Order.');
+    if (isCreateCdlSuccess) {
+      // In case orderNumber is nullish, use fallback.
+      message.success(`Order ${cachedOrderDetail?.orderNumber ?? '-'} is now a CDL Order.`);
       // Changing the searchParams triggers re-fetching
       searchParams.set('cdl', 'true');
       setSearchParams(searchParams);
       // Re-fetch all orders
       refetchAllOrders();
-      resetCreateCdl();
     }
-  }, [isCreateCdlSuccess, searchParams]);
+  }, [isCreateCdlSuccess]);
   useEffect(() => {
-    if (isDeleteCdlSuccess && searchParams.get('cdl') !== 'false') {
-      message.success('Removed CDL Order.');
+    if (isDeleteCdlSuccess) {
+      // In case orderNumber is nullish, use fallback.
+      message.success(`Order ${cachedOrderDetail?.orderNumber ?? '-'} is now a Regular Order.`);
       // Changing the searchParams triggers re-fetching
       searchParams.set('cdl', 'false');
       setSearchParams(searchParams);
       // Re-fetch all orders
       refetchAllOrders();
-      resetDeleteCdl();
     }
-  }, [isDeleteCdlSuccess, searchParams]);
+  }, [isDeleteCdlSuccess]);
 
   useEffect(() => {
     if (isCreateCdlError) {
-      message.error('Failed to create CDL Order.');
+      // In case orderNumber is nullish, use fallback.
+      message.error(`Failed to register order ${cachedOrderDetail?.orderNumber ?? '-'} as a CDL Order.`);
     }
   }, [isCreateCdlError]);
   useEffect(() => {
     if (isDeleteCdlError) {
-      message.error('Failed to remove CDL Order.');
+      // In case orderNumber is nullish, use fallback.
+      message.error(`Failed to register order ${cachedOrderDetail?.orderNumber ?? '-'} as a Regular Order.`);
     }
   }, [isDeleteCdlError]);
 
@@ -218,11 +216,12 @@ const UpdateButton: React.FC = () => {
       overrideReminderTime: (cachedOrderDetail?.checked && cachedOrderDetail?.overrideReminderTime) || null,
       ...(searchParams.get('cdl') === 'true' ? { cdl } : null),
     });
-  }, [cachedOrderDetail, searchParams]);
+  }, [cachedOrderDetail, searchParams.get('cdl')]);
 
   useEffect(() => {
     if (isSuccess) {
-      message.success('Updated order.');
+      // In case orderNumber is nullish, use fallback.
+      message.success(`Order ${cachedOrderDetail?.orderNumber ?? '-'} updated.`);
       // Re-fetch all orders
       refetchAllOrders();
       // Close modal
@@ -234,7 +233,7 @@ const UpdateButton: React.FC = () => {
 
   useEffect(() => {
     if (isError) {
-      message.error('Failed to update order.');
+      message.error(`Failed to update order ${cachedOrderDetail?.orderNumber ?? '-'}.`);
     }
   }, [isError]);
 
