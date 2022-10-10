@@ -1,8 +1,9 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { InfoCircleOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, DatePicker, Form, FormItemProps, Input, message, Select, Spin } from 'antd';
+import { Button, ButtonProps, Checkbox, DatePicker, Form, FormItemProps, Input, message, Select, Spin } from 'antd';
 import jsConvert from 'js-convert-case';
+import { isEqual } from 'lodash-es';
 import moment from 'moment';
 import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -123,7 +124,7 @@ const OrderEditorContext = React.createContext<{
   refetchOrderDetail: () => void;
 }>(null);
 
-const CdlButton: React.FC = () => {
+const CdlButton: React.FC<Pick<ButtonProps, 'disabled'>> = ({ disabled }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { refetchAllOrders } = useContext(OrderTableContext);
   const { cachedOrderDetail } = useContext(OrderEditorContext);
@@ -168,19 +169,7 @@ const CdlButton: React.FC = () => {
     }
   }, [isDeleteCdlError]);
 
-  return !cachedOrderDetail?.tags.includes('CDL') ? (
-    <Button
-      className="float-left"
-      loading={isCreateCdlLoading}
-      onClick={() => {
-        createCdl({
-          bookId: cachedOrderDetail?.id,
-        });
-      }}
-    >
-      <PlusOutlined /> Create CDL Order
-    </Button>
-  ) : (
+  return cachedOrderDetail?.tags.includes('CDL') ? (
     <Button
       className="float-left"
       loading={isDeleteCdlLoading}
@@ -189,13 +178,27 @@ const CdlButton: React.FC = () => {
           bookId: cachedOrderDetail?.id,
         });
       }}
+      disabled={disabled}
     >
       <MinusOutlined /> Remove CDL Order
+    </Button>
+  ) : (
+    <Button
+      className="float-left"
+      loading={isCreateCdlLoading}
+      onClick={() => {
+        createCdl({
+          bookId: cachedOrderDetail?.id,
+        });
+      }}
+      disabled={disabled}
+    >
+      <PlusOutlined /> Create CDL Order
     </Button>
   );
 };
 
-const UpdateButton: React.FC = () => {
+const UpdateButton: React.FC<Pick<ButtonProps, 'disabled'>> = ({ disabled }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { refetchAllOrders } = useContext(OrderTableContext);
   const { cachedOrderDetail } = useContext(OrderEditorContext);
@@ -238,7 +241,7 @@ const UpdateButton: React.FC = () => {
   }, [isError]);
 
   return (
-    <Button type="primary" loading={isLoading} onClick={handleUpdate}>
+    <Button type="primary" loading={isLoading} onClick={handleUpdate} disabled={disabled}>
       Update
     </Button>
   );
@@ -332,8 +335,8 @@ const FormField: React.FC<FormFieldProps> = (props) => {
 const OrderEditor: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const {
-    data,
-    isLoading,
+    data: orderDetail,
+    isFetching,
     isSuccess,
     isError,
     refetch: refetchOrderDetail,
@@ -347,14 +350,14 @@ const OrderEditor: React.FC = () => {
       refetchOnMountOrArgChange: true,
     }
   );
-  const [cachedOrderDetail, setCachedOrderDetail] = useState<typeof data>();
+  const [cachedOrderDetail, setCachedOrderDetail] = useState<typeof orderDetail>();
 
   // Update cached data when data changes
   useEffect(() => {
-    if (isSuccess && data) {
-      setCachedOrderDetail(data);
+    if (isSuccess && orderDetail) {
+      setCachedOrderDetail(orderDetail);
     }
-  }, [isSuccess, data]);
+  }, [isSuccess, orderDetail]);
 
   // Show error message on error
   useEffect(() => {
@@ -385,9 +388,11 @@ const OrderEditor: React.FC = () => {
         visible={searchParams.has('detail') && searchParams.has('cdl')}
         footer={
           <>
-            <CdlButton />
-            <Button onClick={handleClose}>Close</Button>
-            <UpdateButton />
+            <CdlButton disabled={isFetching} />
+            <Button onClick={handleClose} disabled={isFetching}>
+              Close
+            </Button>
+            <UpdateButton disabled={isFetching || isEqual(orderDetail, cachedOrderDetail)} />
           </>
         }
         width={1200}
@@ -398,8 +403,8 @@ const OrderEditor: React.FC = () => {
         maskClosable={false}
         onCancel={handleClose}
       >
-        <Scrollbars style={{ height: 'calc(100vh - 200px)' }}>
-          <Spin spinning={isLoading}>
+        <Spin spinning={isFetching} tip={<div className="mt-2">Loading...</div>}>
+          <Scrollbars style={{ height: 'calc(100vh - 200px)' }}>
             <Form className="px-8 py-6">
               <div className="grid grid-cols-2 gap-8">
                 <div className="rounded-md outline outline-1 outline-gray-200 px-8 py-6">
@@ -501,8 +506,8 @@ const OrderEditor: React.FC = () => {
                 </div>
               </div>
             </Form>
-          </Spin>
-        </Scrollbars>
+          </Scrollbars>
+        </Spin>
       </StyledModal>
     </OrderEditorContext.Provider>
   );
