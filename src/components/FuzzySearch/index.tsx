@@ -9,7 +9,7 @@ const FuzzySearch: React.FC<{ className?: string }> = ({ className }) => {
 
   useEffect(() => {
     setInputValue(searchParams.get('search') ?? '');
-  }, [searchParams]);
+  }, [searchParams.get('search')]);
 
   return (
     <Input.Search

@@ -98,7 +98,7 @@ const SaveAsNewModal: React.FC = () => {
       setVisibleModal(null);
       reset();
     }
-  }, [isSuccess, data, searchParams]);
+  }, [isSuccess, data, searchParams.get('preset')]);
 
   useEffect(() => {
     if (isError) {
@@ -239,7 +239,7 @@ const DeleteModal: React.FC = () => {
       setVisibleModal(null);
       reset();
     }
-  }, [isSuccess, searchParams]);
+  }, [isSuccess, searchParams.get('preset')]);
 
   useEffect(() => {
     if (isError) {
@@ -279,7 +279,7 @@ const PresetControl: React.FC = () => {
         ({ presetId }) => presetId === parseInt(searchParams.get('preset'))
       ) || builtinTagPresets[0];
     setCurrentPreset(preset);
-  }, [customPresets, searchParams]);
+  }, [customPresets, searchParams.get('preset')]);
 
   const [visibleModal, setVisibleModal] = useState<ModalName>(null);
   const contextValue = useMemo(
