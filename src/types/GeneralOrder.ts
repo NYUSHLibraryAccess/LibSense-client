@@ -1,0 +1,41 @@
+import { OrderTag } from './OrderTag';
+
+type GeneralOrder = {
+  id: number;
+  tags: OrderTag[];
+  barcode: string;
+  title: string;
+  orderNumber: string;
+  createdDate: string;
+  arrivalDate: string;
+  ipsCode: string;
+  ips: string;
+  ipsDate: string;
+  vendorCode: string;
+  libraryNote: string;
+  attention: boolean;
+  checked: boolean;
+  overrideReminderTime: string;
+  trackingNote: string;
+  bsn: string;
+  arrivalText: string;
+  arrivalStatus: string;
+  arrivalOperator: string;
+  itemsCreated: string;
+  itemStatus: string;
+  material: string;
+  collection: string;
+  ipsUpdateDate: string;
+  ipsCodeOperator: string;
+  updateDate: string;
+  sublibrary: string;
+  orderStatus: string;
+  invoiceStatus: string;
+  materialType: string;
+  orderType: string;
+  orderUnit: string;
+  totalPrice: number;
+  orderStatusUpdateDate: string;
+};
+
+export { GeneralOrder };

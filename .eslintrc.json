@@ -1,0 +1,67 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["simple-import-sort"],
+  "rules": {
+    "react/display-name": "off",
+    "react/prop-types": "off",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          ["^react$", "^react-dom", "^react-redux", "^@reduxjs", "^react-helmet-async", "^react-router-dom", "^@?\\w"],
+          [
+            "^@/components",
+            "^@/routes",
+            "^@/store",
+            "^@/slices",
+            "^@/services",
+            "^@/utils",
+            "^@/hooks",
+            "^@/constants",
+            "^@/types",
+            "^@/assets",
+            "^@/styles",
+            "^@/app.less",
+            "^\\."
+          ]
+        ]
+      }
+    ],
+    "simple-import-sort/exports": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@typescript-eslint/recommended"],
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "error"
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+.table {
+  :global(.ant-table) :global(.ant-table-tbody) {
+    > tr > td {
+      @apply transition-colors;
+    }
+
+    > tr.odd-index-row > td {
+      @apply bg-gray-50;
+    }
+
+    > tr > td:global(.ant-table-column-sort) {
+      @apply bg-gray-100;
+    }
+
+    > tr:hover > td {
+      @apply bg-violet-50;
+    }
+
+    > tr.check-row > td {
+      @apply bg-lime-100;
+    }
+
+    > tr.attention-row > td {
+      @apply bg-red-100;
+    }
+
+    > tr:global(.ant-table-row-selected) > td {
+      @apply bg-violet-200;
+    }
+  }
+
+  &.shrink-header {
+    :global(.ant-table) :global(.ant-table-thead) {
+      > tr > th {
+        @apply text-xs py-1;
+      }
+    }
+  }
+}
