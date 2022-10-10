@@ -232,7 +232,7 @@ const useOrderTable = () => {
   // Reset page index on sorter, filters, extra filters, and fuzzy search changes
   useEffect(() => {
     setPageIndex(0);
-  }, [sortColumn, sortDescend, filters, views, searchParams]);
+  }, [sortColumn, sortDescend, filters, views, searchParams.get('search')]);
 
   // Reset row selection on page index changes
   useEffect(() => {
