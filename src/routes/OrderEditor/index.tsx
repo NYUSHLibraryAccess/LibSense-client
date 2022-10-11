@@ -213,8 +213,7 @@ const UpdateButton: React.FC<Pick<ButtonProps, 'disabled'>> = ({ disabled }) => 
     if (!cachedOrderDetail) return;
     updateOrder({
       bookId: cachedOrderDetail.id,
-      // If the trackingNote is empty, send empty string to delete this field.
-      trackingNote: cachedOrderDetail.trackingNote || '',
+      trackingNote: cachedOrderDetail.trackingNote,
       checked: cachedOrderDetail.checked,
       attention: cachedOrderDetail.attention,
       overrideReminderTime: cachedOrderDetail.overrideReminderTime,
@@ -263,7 +262,8 @@ const FormField: React.FC<FormFieldProps> = (props) => {
         <Input
           // Assume the type of cachedData is the union of GeneralOrder and CdlOrder, and assume the value is of string type.
           value={
-            ((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string) || (props.readOnly ? '-' : '')
+            ((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string) ||
+            (props.readOnly ? '-' : null)
           }
           onChange={(event) => {
             setCachedOrderDetail((prevState) => ({
@@ -281,7 +281,8 @@ const FormField: React.FC<FormFieldProps> = (props) => {
         <Input.TextArea
           // Assume the type of cachedData is the union of GeneralOrder and CdlOrder, and assume the value is of string type.
           value={
-            ((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string) || (props.readOnly ? '-' : '')
+            ((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string) ||
+            (props.readOnly ? '-' : null)
           }
           onChange={(event) => {
             setCachedOrderDetail((prevState) => ({
@@ -459,11 +460,14 @@ const OrderEditor: React.FC = () => {
                   <div className="grid grid-cols-1 gap-y-3">
                     <Form.Item label="Tracking Note" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} className="mb-0">
                       <Input.TextArea
-                        value={cachedOrderDetail?.trackingNote}
+                        // Convert all falsy values to `null`.
+                        value={cachedOrderDetail?.trackingNote || null}
                         onChange={(event) => {
                           setCachedOrderDetail((prevState) => ({
                             ...prevState,
-                            trackingNote: event.target.value,
+                            // When deleting all characters or clicking the clear button, the value will be '',
+                            // convert '' to `null`. Since the value cannot be other falsy values, it is unambiguous here.
+                            trackingNote: event.target.value || null,
                           }));
                         }}
                         allowClear
