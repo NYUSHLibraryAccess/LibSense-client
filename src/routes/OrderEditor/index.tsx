@@ -29,8 +29,13 @@ type FormFieldProps = {
   wrapperColSpan?: FormItemProps['wrapperCol']['span'];
 } & (
   | {
-      type: 'input' | 'textarea';
+      type: 'input';
       readOnly?: boolean;
+    }
+  | {
+      type: 'textarea';
+      readOnly?: boolean;
+      rows?: number;
     }
   | {
       type: 'datepicker';
@@ -259,10 +264,14 @@ const FormField: React.FC<FormFieldProps> = (props) => {
     >
       {props.type === 'input' && (
         <Input
-          // Assume the type of cachedData is the union of GeneralOrder and CdlOrder, and assume the value is of string type.
+          // Assume the type of cachedData is the union of GeneralOrder and CdlOrder,
+          // and assume the value is of string type.
+          // Only use fallback value in readOnly mode and when the value is falsy.
+          // Indeed, the only possible falsy value from server should be `null`.
           value={
-            ((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string) ||
-            (props.readOnly ? '-' : null)
+            (cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] || !props.readOnly
+              ? ((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string)
+              : '-'
           }
           onChange={(event) => {
             setCachedOrderDetail((prevState) => ({
@@ -278,10 +287,14 @@ const FormField: React.FC<FormFieldProps> = (props) => {
       )}
       {props.type === 'textarea' && (
         <Input.TextArea
-          // Assume the type of cachedData is the union of GeneralOrder and CdlOrder, and assume the value is of string type.
+          // Assume the type of cachedData is the union of GeneralOrder and CdlOrder,
+          // and assume the value is of string type.
+          // Only use fallback value in readOnly mode and when the value is falsy.
+          // Indeed, the only possible falsy value from server should be `null`.
           value={
-            ((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string) ||
-            (props.readOnly ? '-' : null)
+            (cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] || !props.readOnly
+              ? ((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string)
+              : '-'
           }
           onChange={(event) => {
             setCachedOrderDetail((prevState) => ({
@@ -293,6 +306,7 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           }}
           allowClear
           readOnly={props.readOnly}
+          rows={props.rows}
         />
       )}
       {props.type === 'datepicker' && (
@@ -301,7 +315,8 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           value={
             // Assume the type of cachedData is the union of GeneralOrder and CdlOrder
             // Never attempt to convert a falsy value to a moment object.
-            // Indeed, the value cannot be other falsy values except `null`.
+            // Indeed, the only possible falsy value from server should be `null`.
+            // However, to minimize the exception possibility, ignore all falsy values.
             (cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex]
               ? // Assume the type of cachedData is the union of GeneralOrder and CdlOrder, and assume the value is of string type.
                 moment((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string)
@@ -324,7 +339,8 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           showSearch
           allowClear
           // Assume the type of cachedData is the union of GeneralOrder and CdlOrder
-          // Converting `null` to '(Empty)'. Since `undefined` will never occur, it is unambiguous to use `??`.
+          // Converting `null` to '(Empty)'.
+          // Indeed, the only possible nullish value from server should be `null`.
           value={(cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] ?? '(Empty)'}
           // Filter out the original `null` and add '(Empty)' as the first value.
           options={['(Empty)', ...(metaData?.[props.metaDataIndex].filter((value) => value !== null) || [])].map(
@@ -457,22 +473,7 @@ const OrderEditor: React.FC = () => {
                 )}
                 <div className="rounded-md outline outline-1 outline-gray-200 px-8 py-6 col-span-2">
                   <div className="grid grid-cols-1 gap-y-3">
-                    <Form.Item label="Tracking Note" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} className="mb-0">
-                      <Input.TextArea
-                        // Convert all falsy values to `null`.
-                        value={cachedOrderDetail?.trackingNote || null}
-                        onChange={(event) => {
-                          setCachedOrderDetail((prevState) => ({
-                            ...prevState,
-                            // When deleting all characters or clicking the clear button, the value will be '',
-                            // convert '' to `null`. Since the value cannot be other falsy values, it is unambiguous here.
-                            trackingNote: event.target.value || null,
-                          }));
-                        }}
-                        allowClear
-                        rows={4}
-                      />
-                    </Form.Item>
+                    <FormField dataIndex="trackingNote" type="textarea" labelColSpan={4} wrapperColSpan={20} rows={4} />
                   </div>
                 </div>
                 <div className="rounded-md outline outline-1 outline-gray-200 px-8 py-6 col-span-2">
@@ -493,6 +494,9 @@ const OrderEditor: React.FC = () => {
                       <DatePicker
                         className="ml-2 w-48"
                         value={
+                          // Never attempt to convert a falsy value to a moment object.
+                          // Indeed, the only possible falsy value from server should be `null`.
+                          // However, to minimize the exception possibility, ignore all falsy values.
                           cachedOrderDetail?.overrideReminderTime
                             ? moment(cachedOrderDetail?.overrideReminderTime)
                             : null
