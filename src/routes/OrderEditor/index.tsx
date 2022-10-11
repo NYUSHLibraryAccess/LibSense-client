@@ -466,6 +466,7 @@ const OrderEditor: React.FC = () => {
                           setCachedOrderDetail((prevState) => ({
                             ...prevState,
                             checked: event.target.checked,
+                            overrideReminderTime: event.target.checked ? prevState.overrideReminderTime : null,
                           }));
                         }}
                       >
