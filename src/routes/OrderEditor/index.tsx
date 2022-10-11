@@ -515,7 +515,7 @@ const OrderEditor: React.FC = () => {
                         disabled={!cachedOrderDetail?.checked}
                       />
                     </Form.Item>
-                    {/* Mark as requiring checking */}
+                    {/* Mark as checking-required */}
                     <Form.Item wrapperCol={{ offset: 4 }} className="mb-0">
                       <Checkbox
                         checked={cachedOrderDetail?.checkAnyway}
@@ -526,7 +526,7 @@ const OrderEditor: React.FC = () => {
                           }));
                         }}
                       >
-                        Mark as Requiring Checking
+                        Mark as Checking-Required
                       </Checkbox>
                     </Form.Item>
                     {/* Mark as attention-required */}
