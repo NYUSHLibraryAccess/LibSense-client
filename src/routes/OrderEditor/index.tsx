@@ -268,8 +268,8 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           onChange={(event) => {
             setCachedOrderDetail((prevState) => ({
               ...prevState,
-              // When deleting all characters or clicking the clear button, the `dataString` will be '',
-              // convert '' to `null`. Since the dataString cannot be other falsy values, it is unambiguous here.
+              // When deleting all characters or clicking the clear button, the value will be '',
+              // convert '' to `null`. Since the value cannot be other falsy values, it is unambiguous here.
               [props.dataIndex]: event.target.value || null,
             }));
           }}
@@ -286,8 +286,8 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           onChange={(event) => {
             setCachedOrderDetail((prevState) => ({
               ...prevState,
-              // When deleting all characters or clicking the clear button, the `dataString` will be '',
-              // convert '' to `null`. Since the dataString cannot be other falsy values, it is unambiguous here.
+              // When deleting all characters or clicking the clear button, the value will be '',
+              // convert '' to `null`. Since the value cannot be other falsy values, it is unambiguous here.
               [props.dataIndex]: event.target.value || null,
             }));
           }}
@@ -311,7 +311,7 @@ const FormField: React.FC<FormFieldProps> = (props) => {
             setCachedOrderDetail((prevState) => ({
               ...prevState,
               // When clicking the clear button, the `dataString` will be '', convert '' to `null`.
-              // Since the dataString cannot be other falsy values, it is unambiguous here.
+              // Since the `dataString` cannot be other falsy values, it is unambiguous here.
               [props.dataIndex]: dateString || null,
             }));
           }}
