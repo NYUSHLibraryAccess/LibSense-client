@@ -1,5 +1,3 @@
-import { sortBy } from 'lodash-es';
-
 import { MetaData } from '@/types/MetaData';
 import { baseApi } from './baseApi';
 
@@ -15,21 +13,6 @@ const dataApi = baseApi.injectEndpoints({
       query: () => ({
         url: '/data/metadata',
       }),
-      transformResponse: (response: MetaDataResp) =>
-        // It must be a valid MetaDataResp
-        Object.fromEntries(
-          Object.entries(response).map(([key, value]) => [
-            key,
-            // Sort null in the first
-            typeof value === 'object'
-              ? sortBy(
-                  value,
-                  (item) => Number(item !== null),
-                  (item) => item
-                )
-              : value,
-          ])
-        ) as MetaDataResp,
     }),
     uploadData: builder.mutation<void, UploadDataArgs>({
       query: (args) => ({

@@ -207,16 +207,17 @@ const UpdateButton: React.FC<Pick<ButtonProps, 'disabled'>> = ({ disabled }) => 
   const handleUpdate = useCallback(() => {
     // cachedOrderDetail must be CdlOrder
     const cdl = Object.fromEntries(
-      cdlInfoFields.map(({ dataIndex }) => [dataIndex, (cachedOrderDetail as CdlOrder)?.[dataIndex] || null])
+      cdlInfoFields.map(({ dataIndex }) => [dataIndex, (cachedOrderDetail as CdlOrder)?.[dataIndex]])
     );
     // Setting one field to null can delete this field.
+    if (!cachedOrderDetail) return;
     updateOrder({
-      bookId: cachedOrderDetail?.id,
-      trackingNote: cachedOrderDetail?.trackingNote || null,
-      checked: cachedOrderDetail?.checked,
-      attention: cachedOrderDetail?.attention,
-      // If it is not checked, or the overrideReminderTime is empty, send null to delete this field.
-      overrideReminderTime: (cachedOrderDetail?.checked && cachedOrderDetail?.overrideReminderTime) || null,
+      bookId: cachedOrderDetail.id,
+      // If the trackingNote is empty, send empty string to delete this field.
+      trackingNote: cachedOrderDetail.trackingNote || '',
+      checked: cachedOrderDetail.checked,
+      attention: cachedOrderDetail.attention,
+      overrideReminderTime: cachedOrderDetail.overrideReminderTime,
       ...(searchParams.get('cdl') === 'true' ? { cdl } : null),
     });
   }, [cachedOrderDetail, searchParams.get('cdl')]);
@@ -267,7 +268,9 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           onChange={(event) => {
             setCachedOrderDetail((prevState) => ({
               ...prevState,
-              [props.dataIndex]: event.target.value,
+              // When deleting all characters or clicking the clear button, the `dataString` will be '',
+              // convert '' to `null`. Since the dataString cannot be other falsy values, it is unambiguous here.
+              [props.dataIndex]: event.target.value || null,
             }));
           }}
           allowClear
@@ -283,7 +286,9 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           onChange={(event) => {
             setCachedOrderDetail((prevState) => ({
               ...prevState,
-              [props.dataIndex]: event.target.value,
+              // When deleting all characters or clicking the clear button, the `dataString` will be '',
+              // convert '' to `null`. Since the dataString cannot be other falsy values, it is unambiguous here.
+              [props.dataIndex]: event.target.value || null,
             }));
           }}
           allowClear
@@ -295,6 +300,8 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           className="w-full"
           value={
             // Assume the type of cachedData is the union of GeneralOrder and CdlOrder
+            // Never attempt to convert a falsy value to a moment object.
+            // Indeed, the value cannot be other falsy values except `null`.
             (cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex]
               ? // Assume the type of cachedData is the union of GeneralOrder and CdlOrder, and assume the value is of string type.
                 moment((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string)
@@ -303,7 +310,9 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           onChange={(date, dateString) => {
             setCachedOrderDetail((prevState) => ({
               ...prevState,
-              [props.dataIndex]: dateString,
+              // When clicking the clear button, the `dataString` will be '', convert '' to `null`.
+              // Since the dataString cannot be other falsy values, it is unambiguous here.
+              [props.dataIndex]: dateString || null,
             }));
           }}
           allowClear
@@ -315,15 +324,21 @@ const FormField: React.FC<FormFieldProps> = (props) => {
           showSearch
           allowClear
           // Assume the type of cachedData is the union of GeneralOrder and CdlOrder
-          value={(cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex]}
-          options={metaData?.[props.metaDataIndex].map((value) => ({
-            label: value ?? '(Empty)',
-            value,
-          }))}
+          // Converting `null` to '(Empty)'. Since `undefined` will never occur, it is unambiguous to use `??`.
+          value={(cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] ?? '(Empty)'}
+          // Filter out the original `null` and add '(Empty)' as the first value.
+          options={['(Empty)', ...(metaData?.[props.metaDataIndex].filter((value) => value !== null) || [])].map(
+            (value) => ({
+              label: value,
+              value,
+            })
+          )}
           onChange={(value) => {
             setCachedOrderDetail((prevState) => ({
               ...prevState,
-              [props.dataIndex]: value,
+              // Convert '(Empty)' to `null`.
+              // When clicking the clear button, the value will be `undefined`, convert `undefined` to `null`.
+              [props.dataIndex]: value !== '(Empty)' && value !== undefined ? value : null,
             }));
           }}
         />
