@@ -5,7 +5,6 @@ type CdlOnlyOrder = {
   pdfDeliveryDate: string;
   backToKarmsDate: string;
   circPdfUrl: string;
-  orderPurchasedDate: string;
   dueDate: string;
   physicalCopyStatus: 'Not Arrived' | 'On Shelf' | 'DVD';
   vendorFileUrl: string;

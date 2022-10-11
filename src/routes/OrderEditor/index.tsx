@@ -97,7 +97,6 @@ const cdlInfoFields: FormFieldProps[] = [
     labelColSpan: 12,
     wrapperColSpan: 12,
   },
-  { dataIndex: 'orderPurchasedDate', type: 'datepicker', labelColSpan: 12, wrapperColSpan: 12 },
   {
     dataIndex: 'bobcatPermanentLink',
     title: 'BobCat Permanent Link',

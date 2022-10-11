@@ -91,7 +91,6 @@ const defaultColumnOptions: ColumnOption[] = [
   { visible: false, dataIndex: 'totalPrice', widthCls: 'w-24', sortable: true },
   { visible: false, dataIndex: 'orderStatusUpdateDate', widthCls: 'w-24', sortable: true },
   // Hidden CDl columns
-  { visible: false, dataIndex: 'orderPurchasedDate', widthCls: 'w-48', sortable: true, cdlOnly: true },
   { visible: false, dataIndex: 'dueDate', widthCls: 'w-48', sortable: true, cdlOnly: true },
   { visible: false, dataIndex: 'physicalCopyStatus', widthCls: 'w-48', sortable: true, cdlOnly: true },
   {
