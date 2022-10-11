@@ -33,7 +33,9 @@ type UpdateOrderArgs = {
   bookId: number;
   trackingNote?: string;
   checked?: boolean;
+  checkAnyway?: boolean;
   attention?: boolean;
+  sensitive?: boolean;
   overrideReminderTime?: string;
   cdl?: Partial<CdlOnlyOrder>;
 };

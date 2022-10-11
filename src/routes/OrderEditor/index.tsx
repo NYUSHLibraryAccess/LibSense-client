@@ -219,7 +219,9 @@ const UpdateButton: React.FC<Pick<ButtonProps, 'disabled'>> = ({ disabled }) => 
       bookId: cachedOrderDetail.id,
       trackingNote: cachedOrderDetail.trackingNote,
       checked: cachedOrderDetail.checked,
+      checkAnyway: cachedOrderDetail.checkAnyway,
       attention: cachedOrderDetail.attention,
+      sensitive: cachedOrderDetail.tags.includes('Sensitive'),
       overrideReminderTime: cachedOrderDetail.overrideReminderTime,
       ...(searchParams.get('cdl') === 'true' ? { cdl } : null),
     });
@@ -478,6 +480,7 @@ const OrderEditor: React.FC = () => {
                 </div>
                 <div className="rounded-md outline outline-1 outline-gray-200 px-8 py-6 col-span-2">
                   <div className="grid grid-cols-1 gap-y-3">
+                    {/* Mark as tracked */}
                     <Form.Item wrapperCol={{ offset: 4 }} className="mb-0">
                       <Checkbox
                         checked={cachedOrderDetail?.checked}
@@ -512,6 +515,21 @@ const OrderEditor: React.FC = () => {
                         disabled={!cachedOrderDetail?.checked}
                       />
                     </Form.Item>
+                    {/* Mark as requiring checking */}
+                    <Form.Item wrapperCol={{ offset: 4 }} className="mb-0">
+                      <Checkbox
+                        checked={cachedOrderDetail?.checkAnyway}
+                        onChange={(event) => {
+                          setCachedOrderDetail((prevState) => ({
+                            ...prevState,
+                            checkAnyway: event.target.checked,
+                          }));
+                        }}
+                      >
+                        Mark as Requiring Checking
+                      </Checkbox>
+                    </Form.Item>
+                    {/* Mark as attention-required */}
                     <Form.Item wrapperCol={{ offset: 4 }} className="mb-0">
                       <Checkbox
                         checked={cachedOrderDetail?.attention}
@@ -523,6 +541,24 @@ const OrderEditor: React.FC = () => {
                         }}
                       >
                         Mark as Attention-Required
+                      </Checkbox>
+                    </Form.Item>
+                    {/* Mark as sensitive */}
+                    <Form.Item wrapperCol={{ offset: 4 }} className="mb-0">
+                      <Checkbox
+                        checked={cachedOrderDetail?.tags.includes('Sensitive')}
+                        onChange={(event) => {
+                          setCachedOrderDetail((prevState) => ({
+                            ...prevState,
+                            // There is no field for sensitive in order type,
+                            // save the information in the field for tags.
+                            tags: event.target.checked
+                              ? [...prevState.tags, 'Sensitive']
+                              : prevState.tags.filter((tag) => tag !== 'Sensitive'),
+                          }));
+                        }}
+                      >
+                        Mark as Sensitive
                       </Checkbox>
                     </Form.Item>
                   </div>

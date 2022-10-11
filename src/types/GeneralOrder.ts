@@ -15,6 +15,7 @@ type GeneralOrder = {
   libraryNote: string;
   attention: boolean;
   checked: boolean;
+  checkAnyway: boolean;
   overrideReminderTime: string;
   trackingNote: string;
   bsn: string;
