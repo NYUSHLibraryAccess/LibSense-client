@@ -6,14 +6,7 @@ import { StyledModal } from '@/components/StyledModal';
 import { OrderTableContext } from '@/routes/OrderTable';
 
 const TablePanel: React.FC = () => {
-  const {
-    uiSize,
-    setUiSize,
-    highlightCheckMark,
-    setHighlightCheckMark,
-    highlightAttentionMark,
-    setHighlightAttentionMark,
-  } = useContext(OrderTableContext);
+  const { uiSize, setUiSize, highlightAttentionMark, setHighlightAttentionMark } = useContext(OrderTableContext);
 
   const [visible, setVisible] = useState(false);
 
@@ -39,9 +32,6 @@ const TablePanel: React.FC = () => {
               <Radio.Button value="middle">Middle</Radio.Button>
               <Radio.Button value="large">Large</Radio.Button>
             </Radio.Group>
-          </Form.Item>
-          <Form.Item label="Highlight Checked Marks" className="mb-2">
-            <Switch checked={highlightCheckMark} onChange={setHighlightCheckMark} />
           </Form.Item>
           <Form.Item label="Highlight Attention-Required Marks" className="mb-0">
             <Switch checked={highlightAttentionMark} onChange={setHighlightAttentionMark} />

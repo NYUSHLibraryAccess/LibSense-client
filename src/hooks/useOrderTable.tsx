@@ -24,8 +24,6 @@ const useOrderTable = () => {
 
   // UI size
   const [uiSize, setUiSize] = useState<TableProps<GeneralOrder | CdlOrder>['size']>('small');
-  // Highlight check mark
-  const [highlightCheckMark, setHighlightCheckMark] = useState(false);
   // Highlight attention mark
   const [highlightAttentionMark, setHighlightAttentionMark] = useState(true);
 
@@ -249,8 +247,6 @@ const useOrderTable = () => {
   return {
     uiSize,
     setUiSize,
-    highlightCheckMark,
-    setHighlightCheckMark,
     highlightAttentionMark,
     setHighlightAttentionMark,
     selectedRowKeys,

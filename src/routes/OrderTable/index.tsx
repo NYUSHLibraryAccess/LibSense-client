@@ -21,7 +21,6 @@ const OrderTable: React.FC = () => {
   const orderTable = useOrderTable();
   const {
     uiSize,
-    highlightCheckMark,
     highlightAttentionMark,
     selectedRowKeys,
     setSelectedRowKeys,
@@ -58,7 +57,6 @@ const OrderTable: React.FC = () => {
               rowClassName={(record, index) =>
                 getClassName(
                   index % 2 !== 0 && style.oddIndexRow,
-                  highlightCheckMark && record.checked && style.checkRow,
                   highlightAttentionMark && record.attention && style.attentionRow
                 )
               }
