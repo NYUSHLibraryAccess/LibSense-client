@@ -18,6 +18,17 @@ const defaultColumnOptions: ColumnOption[] = [
     cdlOnly: true,
   },
   { visible: true, dataIndex: 'arrivalDate', widthCls: 'w-24', sortable: true },
+  {
+    visible: true,
+    dataIndex: 'estArrival',
+    title: 'Estimated Arrival Date',
+    render: (value) => (
+      <Tooltip title={value ?? 'Vendor average arrival date is not specified.'} mouseEnterDelay={0.5}>
+        <div className="w-24 whitespace-nowrap overflow-hidden text-ellipsis">{value ?? '-'}</div>
+      </Tooltip>
+    ),
+    sortable: true,
+  },
   { visible: true, dataIndex: 'ipsDate', title: 'IPS Date', widthCls: 'w-24', sortable: true },
   {
     visible: true,

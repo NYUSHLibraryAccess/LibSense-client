@@ -8,6 +8,7 @@ type GeneralOrder = {
   orderNumber: string;
   createdDate: string;
   arrivalDate: string;
+  estArrival: string;
   ipsCode: string;
   ips: string;
   ipsDate: string;
