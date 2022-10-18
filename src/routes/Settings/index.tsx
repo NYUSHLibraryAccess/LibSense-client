@@ -4,43 +4,46 @@ import { Menu } from 'antd';
 
 import { StyledCard } from '@/components/StyledCard';
 import { useAppSelector } from '@/store';
+import { SystemUser } from '@/types/SystemUser';
+
+const items: { key: string; label: string; path: string; allowedRoles: SystemUser['role'][] }[] = [
+  {
+    key: 'users',
+    label: 'Users',
+    path: '/settings/users',
+    allowedRoles: ['System Admin'],
+  },
+  {
+    key: 'vendors',
+    label: 'Vendors',
+    path: '/settings/vendors',
+    allowedRoles: ['System Admin'],
+  },
+  {
+    key: 'cdlVendorDate',
+    label: 'CDL Vendor Date',
+    path: '/settings/cdlVendorDate',
+    allowedRoles: ['System Admin'],
+  },
+  {
+    key: 'sensitiveData',
+    label: 'Sensitive Data',
+    path: '/settings/sensitiveData',
+    allowedRoles: ['System Admin'],
+  },
+  {
+    key: 'about',
+    label: 'About',
+    path: '/settings/about',
+    allowedRoles: ['System Admin', 'User'],
+  },
+];
 
 const Settings: React.FC = () => {
   const { role } = useAppSelector((state) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const items = useMemo<{ key: string; label: string; path: string; disabled?: boolean }[]>(
-    () => [
-      {
-        key: 'users',
-        label: 'Users',
-        disabled: role !== 'System Admin',
-        path: '/settings/users',
-      },
-      {
-        key: 'vendors',
-        label: 'Vendors',
-        path: '/settings/vendors',
-      },
-      {
-        key: 'cdlVendorDate',
-        label: 'CDL Vendor Date',
-        path: '/settings/cdlVendorDate',
-      },
-      {
-        key: 'sensitiveData',
-        label: 'Sensitive Data',
-        path: '/settings/sensitiveData',
-      },
-      {
-        key: 'about',
-        label: 'About',
-        path: '/settings/about',
-      },
-    ],
-    [role]
-  );
   const selectedKey = useMemo(() => items.find(({ path }) => path === location.pathname)?.key || '', [items, location]);
 
   return (
@@ -50,7 +53,12 @@ const Settings: React.FC = () => {
         <StyledCard bodyStyle={{ padding: '0 8px' }}>
           <Menu
             mode="horizontal"
-            items={items.filter(({ disabled }) => !disabled).map(({ key, label }) => ({ key, label }))}
+            items={items
+              .filter(({ allowedRoles }) => allowedRoles.includes(role))
+              .map(({ key, label }) => ({
+                key,
+                label,
+              }))}
             selectedKeys={[selectedKey]}
             onClick={({ key }) => {
               const matchedItem = items.find((item) => item.key === key);

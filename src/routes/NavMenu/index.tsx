@@ -22,6 +22,7 @@ import { updateTitle } from '@/slices/metaTag';
 import { useLogoutMutation } from '@/services/auth';
 import { getClassName } from '@/utils/getClassName';
 import { useRequireAuthStatus } from '@/hooks/useRequireAuthStatus';
+import { SystemUser } from '@/types/SystemUser';
 import avatar from '@/assets/avatar-default.png';
 import LogoSvg from '@/assets/logo.svg';
 
@@ -30,6 +31,7 @@ type MenuItemProps = {
   title: string;
   path: string;
   pattern: RegExp;
+  allowedRoles: SystemUser['role'][];
 };
 
 const items: MenuItemProps[] = [
@@ -38,30 +40,35 @@ const items: MenuItemProps[] = [
     title: 'Dashboard',
     path: '/',
     pattern: /^\/$/,
+    allowedRoles: ['System Admin', 'User'],
   },
   {
     icon: <FontAwesomeIcon icon={faDatabase} />,
     title: 'Manage Orders',
     path: '/manageOrders',
     pattern: /^\/manageOrders/,
+    allowedRoles: ['System Admin', 'User'],
   },
   {
     icon: <FontAwesomeIcon icon={faCloudArrowUp} />,
     title: 'Upload Data',
     path: '/uploadData',
     pattern: /^\/uploadData/,
+    allowedRoles: ['System Admin'],
   },
   {
     icon: <FontAwesomeIcon icon={faFileExport} />,
     title: 'Export Report',
     path: '/exportReport',
     pattern: /^\/exportReport/,
+    allowedRoles: ['System Admin', 'User'],
   },
   {
     icon: <FontAwesomeIcon icon={faGear} />,
     title: 'Settings',
     path: '/settings/about',
     pattern: /^\/settings/,
+    allowedRoles: ['System Admin', 'User'],
   },
 ];
 
@@ -241,6 +248,7 @@ const NavMenu: React.FC = () => {
   const { isFetchingAuthStatus } = useRequireAuthStatus(true);
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { role } = useAppSelector((state) => state.auth);
 
   const [collapsed, setCollapsed] = useState(true);
   const contextValue = useMemo(
@@ -283,9 +291,11 @@ const NavMenu: React.FC = () => {
                 />
               )}
             >
-              {items.map((item, index) => (
-                <MenuItem key={index} {...item} />
-              ))}
+              {items
+                .filter(({ allowedRoles }) => allowedRoles.includes(role))
+                .map((item, index) => (
+                  <MenuItem key={index} {...item} />
+                ))}
             </Scrollbars>
             <div className="flex-none">
               <UserProfileItem />
