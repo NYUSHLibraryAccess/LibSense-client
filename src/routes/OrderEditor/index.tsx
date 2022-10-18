@@ -17,6 +17,7 @@ import {
   useUpdateOrderMutation,
 } from '@/services/orders';
 import { getClassName } from '@/utils/getClassName';
+import { isFriendlyError } from '@/utils/isFriendlyError';
 import { CdlOrder } from '@/types/CdlOrder';
 import { GeneralOrder } from '@/types/GeneralOrder';
 import { MetaData } from '@/types/MetaData';
@@ -206,7 +207,7 @@ const UpdateButton: React.FC<Pick<ButtonProps, 'disabled'>> = ({ disabled }) => 
   const [searchParams, setSearchParams] = useSearchParams();
   const { refetchAllOrders } = useContext(OrderTableContext);
   const { cachedOrderDetail } = useContext(OrderEditorContext);
-  const [updateOrder, { isLoading, isSuccess, isError }] = useUpdateOrderMutation();
+  const [updateOrder, { isLoading, isSuccess, isError, error }] = useUpdateOrderMutation();
 
   const handleUpdate = useCallback(() => {
     // cachedOrderDetail must be CdlOrder
@@ -242,9 +243,13 @@ const UpdateButton: React.FC<Pick<ButtonProps, 'disabled'>> = ({ disabled }) => 
 
   useEffect(() => {
     if (isError) {
-      message.error(`Failed to update order ${cachedOrderDetail?.orderNumber ?? '-'}.`);
+      message.error(
+        `Failed to update order ${cachedOrderDetail?.orderNumber ?? '-'}${
+          isFriendlyError(error) ? `: ${error.data.detail}.` : '.'
+        }`
+      );
     }
-  }, [isError]);
+  }, [isError, error]);
 
   return (
     <Button type="primary" loading={isLoading} onClick={handleUpdate} disabled={disabled}>
