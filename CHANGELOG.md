@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/NYUSHLibraryAccess/LibSense-client/compare/v1.1.0...v1.2.0) (2022-10-18)
+
+
+### Features
+
+* **order-table:** support estimate arrival date ([01def2f](https://github.com/NYUSHLibraryAccess/LibSense-client/commit/01def2fd877c35ff10abd5627b273db1f5a1c839))
+
 ## [1.1.0](https://github.com/NYUSHLibraryAccess/LibSense-client/compare/v1.0.0...v1.1.0) (2022-10-18)
 
 
