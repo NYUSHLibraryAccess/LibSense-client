@@ -64,6 +64,7 @@ const orderInfoFields: FormFieldProps[] = [
   { dataIndex: 'createdDate', title: 'Order Created Date', type: 'input', readOnly: true },
   { dataIndex: 'arrivalText', title: 'Arrival or Not', type: 'input', readOnly: true },
   { dataIndex: 'arrivalDate', title: 'Order Arrival Date', type: 'input', readOnly: true },
+  { dataIndex: 'estArrival', title: 'Estimated Arrival Date', type: 'input', readOnly: true },
   { dataIndex: 'arrivalOperator', title: 'Who Marked Arrival', type: 'input', readOnly: true },
   { dataIndex: 'arrivalStatus', type: 'input', readOnly: true },
   { dataIndex: 'ipsDate', title: 'Order Status Date', type: 'input', readOnly: true },
