@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/NYUSHLibraryAccess/LibSense-client/compare/v1.2.0...v1.3.0) (2022-10-31)
+
+
+### Features
+
+* **order-editor:** add estimated arrival date field ([363dc24](https://github.com/NYUSHLibraryAccess/LibSense-client/commit/363dc243ec7b85f180c44e95eacf5f82c4517140))
+
 ## [1.2.0](https://github.com/NYUSHLibraryAccess/LibSense-client/compare/v1.1.0...v1.2.0) (2022-10-18)
 
 
