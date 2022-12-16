@@ -1,8 +1,5 @@
-# MacOS files
-.DS_Store
-
-# JetBrain IDE files
-.idea
+# Dependency files
+node_modules/
 
 # Yarn files (not using Zero-Installs)
 .pnp.*
@@ -13,12 +10,15 @@
 !.yarn/sdks
 !.yarn/versions
 
-# Dependency files
-node_modules
-
-# Building files
-build
+# Build output
+build/
 
 # Log files
-logs
+logs/
 *.log*
+
+# JetBrain IDE files
+.idea/
+
+# MacOS files
+.DS_Store
