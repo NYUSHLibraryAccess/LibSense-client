@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES6",
-    "lib": ["ES5", "ES6", "DOM"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "esnext",
+    "lib": ["ESNext", "DOM"],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
