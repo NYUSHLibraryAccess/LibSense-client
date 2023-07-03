@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import { useAppSelector } from '@/store';
-import logo from '@/assets/logo-colored.png';
+import logo from '@/assets/logo.png';
 
 const MetaTag: React.FC = () => {
   const { title } = useAppSelector((state) => state.metaTag);

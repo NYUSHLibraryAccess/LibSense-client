@@ -3,7 +3,7 @@ import { GithubOutlined } from '@ant-design/icons';
 import { Form } from 'antd';
 
 import { ContentLimiter } from '@/components/ContentLimiter';
-import logo from '@/assets/logo-colored.png';
+import logo from '@/assets/logo.png';
 
 const About: React.FC = () => {
   return (
@@ -36,6 +36,37 @@ const About: React.FC = () => {
           >
             <GithubOutlined /> GitHub
           </span>
+        </Form.Item>
+        <Form.Item label="Credits">
+          <div>
+            Icons made by{' '}
+            <a href="https://www.freepik.com" title="Freepik" target="_blank" rel="nofollow noreferrer">
+              Freepik
+            </a>{' '}
+            from{' '}
+            <a href="https://www.flaticon.com/" title="Flaticon" target="_blank" rel="nofollow noreferrer">
+              www.flaticon.com
+            </a>
+          </div>
+          <div>
+            Icons made by{' '}
+            <a
+              href="https://www.flaticon.com/authors/kerismaker"
+              title="kerismaker"
+              target="_blank"
+              rel="nofollow noreferrer"
+            >
+              kerismaker
+            </a>{' '}
+            from{' '}
+            <a href="https://www.flaticon.com/" title="Flaticon" target="_blank" rel="nofollow noreferrer">
+              www.flaticon.com
+            </a>
+          </div>
+          <a href="https://www.freepik.com/free-photo/library-with-books_925672.htm#query=bookshelf&position=42&from_view=keyword&track=sph">
+            Image by ikaika
+          </a>{' '}
+          on Freepik
         </Form.Item>
       </Form>
     </ContentLimiter>

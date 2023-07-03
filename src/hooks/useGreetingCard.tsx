@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 
 import { useAppSelector } from '@/store';
 import { useHour } from '@/hooks/useHour';
-import NightSvg from '@/assets/night.svg';
-import SunriseSvg from '@/assets/sunrise.svg';
-import SunsetSvg from '@/assets/sunset.svg';
+import afternoonImg from '@/assets/banner-afternoon.png';
+import morningImg from '@/assets/banner-morning.png';
+import nightImg from '@/assets/banner-night.png';
 
 const useGreetingCard = () => {
   const { username } = useAppSelector((state) => state.auth);
@@ -23,11 +23,11 @@ const useGreetingCard = () => {
   }, [username, hour]);
   const icon = useMemo(() => {
     if (5 <= hour && hour < 16) {
-      return <SunriseSvg />;
+      return <img src={morningImg} />;
     } else if (16 <= hour && hour < 18) {
-      return <SunsetSvg />;
+      return <img src={afternoonImg} />;
     } else {
-      return <NightSvg />;
+      return <img src={nightImg} />;
     }
   }, [hour]);
 

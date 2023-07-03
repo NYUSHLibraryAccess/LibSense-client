@@ -8,7 +8,7 @@ import { getSHA256 } from '@/utils/getSHA256';
 import { isFriendlyError } from '@/utils/isFriendlyError';
 import { useRequireAuthStatus } from '@/hooks/useRequireAuthStatus';
 import { useTitle } from '@/hooks/useTitle';
-import logo from '@/assets/logo-colored.png';
+import logo from '@/assets/logo.png';
 import style from './index.module.less';
 
 const Login: React.FC = () => {

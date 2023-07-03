@@ -23,7 +23,7 @@ import { useLogoutMutation } from '@/services/auth';
 import { getClassName } from '@/utils/getClassName';
 import { useRequireAuthStatus } from '@/hooks/useRequireAuthStatus';
 import { SystemUser } from '@/types/SystemUser';
-import avatar from '@/assets/avatar-default.png';
+import avatar from '@/assets/avatar.png';
 import LogoSvg from '@/assets/logo.svg';
 
 type MenuItemProps = {
