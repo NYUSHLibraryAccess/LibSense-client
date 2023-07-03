@@ -59,7 +59,7 @@ const SearchCard: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <StyledCard className={className}>
       <Input.Search
-        placeholder="Search orders..."
+        placeholder="Search orders... (By Title, Barcode, Order Number, Library Note, Librarians, etc.)"
         allowClear
         enterButton
         onSearch={(value) => {
