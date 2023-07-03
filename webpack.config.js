@@ -3,7 +3,6 @@ const path = require('path');
 const { merge } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin } = require('webpack');
 const WebpackBarPlugin = require('webpackbar');
 const FriendlyErrorsWebpackPlugin = require('@nuxt/friendly-errors-webpack-plugin');
@@ -36,13 +35,9 @@ const config = {
     open: true,
     proxy: {
       '/api': {
-        target: 'http://10.208.6.254:8081',
-        pathRewrite: { '^/api': '' },
+        target: 'https://libsense.shanghai.nyu.edu',
+        secure: false,
       },
-      // '/api': {
-      //   target: 'https://libsense.shanghai.nyu.edu',
-      //   secure: false,
-      // },
     },
   },
   entry: path.resolve(__dirname, 'src/app.tsx'),
@@ -122,14 +117,6 @@ const config = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    // new CopyWebpackPlugin({
-    //   patterns: [
-    //     {
-    //       from: path.resolve(__dirname, 'public'),
-    //       to: path.resolve(__dirname, 'build'),
-    //     },
-    //   ],
-    // }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, 'src/templates/default.html'),
