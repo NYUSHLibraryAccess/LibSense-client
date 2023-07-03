@@ -8,12 +8,13 @@ import { useOverviewQuery } from '@/services/overview';
 import { getClassName } from '@/utils/getClassName';
 import { useGreetingCard } from '@/hooks/useGreetingCard';
 
-const SimpleStatistic: React.FC<{ title: string; value: number; colorCls?: string; onClick?: () => void }> = ({
-  title,
-  value,
-  colorCls,
-  onClick,
-}) => {
+const SimpleStatistic: React.FC<{
+  title: string;
+  value: number;
+  postfix?: string;
+  colorCls?: string;
+  onClick?: () => void;
+}> = ({ title, value, postfix, colorCls, onClick }) => {
   return (
     <div className="flex-1">
       <p className="mb-2 text-sm text-gray-500">{title}</p>
@@ -26,6 +27,7 @@ const SimpleStatistic: React.FC<{ title: string; value: number; colorCls?: strin
         onClick={onClick}
       >
         {value ?? '-'}
+        {postfix && ` ${postfix}`}
       </p>
     </div>
   );
@@ -103,11 +105,11 @@ const TimeSpendingCard: React.FC<{
   return (
     <StyledCard loading={isLoading} title={title} className={className}>
       <div className="flex gap-4">
-        <SimpleStatistic title="Average" value={data?.[`avg${category}`]} colorCls="text-violet-600" />
+        <SimpleStatistic title="Average" value={data?.[`avg${category}`]} postfix="Days" colorCls="text-violet-600" />
         <SimpleDivider />
-        <SimpleStatistic title="Minimum" value={data?.[`min${category}`]} colorCls="text-green-600" />
+        <SimpleStatistic title="Minimum" value={data?.[`min${category}`]} postfix="Days" colorCls="text-green-600" />
         <SimpleDivider />
-        <SimpleStatistic title="Maximum" value={data?.[`max${category}`]} colorCls="text-yellow-600" />
+        <SimpleStatistic title="Maximum" value={data?.[`max${category}`]} postfix="Days" colorCls="text-yellow-600" />
       </div>
     </StyledCard>
   );
@@ -146,6 +148,11 @@ const TimeSpendingChartCard: React.FC<{
         data={dataToPlot}
         xField="type"
         yField="range"
+        yAxis={{
+          title: {
+            text: 'Days',
+          },
+        }}
         color="#7c3aed"
         maxColumnWidth={30}
         style={{
