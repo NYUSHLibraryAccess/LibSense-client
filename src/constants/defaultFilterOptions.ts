@@ -8,7 +8,7 @@ const defaultFilterOptions: FilterOption[] = [
   { op: 'between', col: 'createdDate', val: ['', ''] },
   { op: 'like', col: 'barcode', val: '' },
   { op: 'between', col: 'arrivalDate', val: ['', ''] },
-  { op: 'in', col: 'ipsCode', title: 'IPS Code', val: [] },
+  { op: 'in', col: 'ipsCode', title: 'Item Process Status', val: [] },
   { op: 'between', col: 'ipsDate', title: 'IPS Date', val: ['', ''] },
   { op: 'in', col: 'vendorCode', metaDataIndex: 'vendors', val: [] },
   // CDL filters

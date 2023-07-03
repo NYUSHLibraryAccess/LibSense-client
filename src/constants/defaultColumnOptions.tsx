@@ -33,10 +33,10 @@ const defaultColumnOptions: ColumnOption[] = [
   {
     visible: true,
     dataIndex: 'ipsCode',
-    title: 'IPS Code',
+    title: 'Item Process Status',
     render: (value, record) => (
-      <Tooltip title={record.ips} mouseEnterDelay={0.5}>
-        <div className="w-16 whitespace-nowrap overflow-hidden text-ellipsis">{value ?? '-'}</div>
+      <Tooltip title={value ? record.ips : 'Not In Process'} mouseEnterDelay={0.5}>
+        <div className="w-24 whitespace-nowrap overflow-hidden text-ellipsis">{value ?? 'N/A'}</div>
       </Tooltip>
     ),
     sortable: true,

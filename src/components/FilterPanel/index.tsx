@@ -34,7 +34,7 @@ const SelectWidget: React.FC<Required<Pick<FilterOption, 'metaDataIndex' | 'col'
   const widgetOptions = useMemo(
     () =>
       (data?.[metaDataIndex || (col as keyof Omit<MetaData, 'oldestDate'>)] as string[])?.map((value) => ({
-        label: value ?? '(Empty)',
+        label: value ?? 'N/A',
         value,
       })),
     [data]
