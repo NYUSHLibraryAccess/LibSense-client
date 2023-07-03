@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/NYUSHLibraryAccess/LibSense-client/compare/v1.3.0...v1.4.0) (2023-07-03)
+
+
+### Features
+
+* add unit for dashboard statistics ([b3d6b5c](https://github.com/NYUSHLibraryAccess/LibSense-client/commit/b3d6b5c70112671bb9242aaa1b1bf1cf48dfcd2f))
+* limit mark-as-tracked to admin ([db2d64d](https://github.com/NYUSHLibraryAccess/LibSense-client/commit/db2d64de8071a17d922b27aa5b981e74af436e8b))
+* rename ips code to item process status ([f8cb29f](https://github.com/NYUSHLibraryAccess/LibSense-client/commit/f8cb29fa371a83b79e1e29824bdf487768471521))
+* update dashboard search bar hint ([ad02cd1](https://github.com/NYUSHLibraryAccess/LibSense-client/commit/ad02cd18e7d95f0cbd0f3ed6fe3d7889ec05e804))
+
+
+### Bug Fixes
+
+* add credits to images ([053001b](https://github.com/NYUSHLibraryAccess/LibSense-client/commit/053001bda285b39f408001dcb40f45b64e3ba303))
+
 ## [1.3.0](https://github.com/NYUSHLibraryAccess/LibSense-client/compare/v1.2.0...v1.3.0) (2022-10-31)
 
 
