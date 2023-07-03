@@ -155,11 +155,6 @@ const devConfig = merge(config, {
   stats: false,
   devtool: 'inline-cheap-module-source-map',
   plugins: [new ReactRefreshPlugin(), new FriendlyErrorsWebpackPlugin()],
-  resolve: {
-    fallback: {
-      querystring: require.resolve('querystring-es3'),
-    },
-  },
 });
 
 const prodConfig = merge(config, {
