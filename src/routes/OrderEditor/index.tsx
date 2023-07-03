@@ -9,6 +9,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 
 import { StyledModal } from '@/components/StyledModal';
 import { OrderTableContext } from '@/routes/OrderTable';
+import { useAppSelector } from '@/store';
 import { useMetaDataQuery } from '@/services/data';
 import {
   useCreateCdlMutation,
@@ -373,6 +374,7 @@ const FormField: React.FC<FormFieldProps> = (props) => {
 
 const OrderEditor: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { role } = useAppSelector((state) => state.auth);
   const {
     data: orderDetail,
     isFetching,
@@ -487,40 +489,42 @@ const OrderEditor: React.FC = () => {
                 <div className="rounded-md outline outline-1 outline-gray-200 px-8 py-6 col-span-2">
                   <div className="grid grid-cols-1 gap-y-3">
                     {/* Mark as tracked */}
-                    <Form.Item wrapperCol={{ offset: 4 }} className="mb-0">
-                      <Checkbox
-                        checked={cachedOrderDetail?.checked}
-                        onChange={(event) => {
-                          setCachedOrderDetail((prevState) => ({
-                            ...prevState,
-                            checked: event.target.checked,
-                            overrideReminderTime: event.target.checked ? prevState.overrideReminderTime : null,
-                          }));
-                        }}
-                      >
-                        Mark as Tracked until
-                      </Checkbox>
-                      <DatePicker
-                        className="ml-2 w-48"
-                        value={
-                          // Never attempt to convert a falsy value to a moment object.
-                          // Indeed, the only possible falsy value from server should be `null`.
-                          // However, to minimize the exception possibility, ignore all falsy values.
-                          cachedOrderDetail?.overrideReminderTime
-                            ? moment(cachedOrderDetail?.overrideReminderTime)
-                            : null
-                        }
-                        onChange={(date, dateString) => {
-                          setCachedOrderDetail((prevState) => ({
-                            ...prevState,
-                            overrideReminderTime: dateString,
-                          }));
-                        }}
-                        allowClear
-                        placeholder="Forever"
-                        disabled={!cachedOrderDetail?.checked}
-                      />
-                    </Form.Item>
+                    {role === 'System Admin' && (
+                      <Form.Item wrapperCol={{ offset: 4 }} className="mb-0">
+                        <Checkbox
+                          checked={cachedOrderDetail?.checked}
+                          onChange={(event) => {
+                            setCachedOrderDetail((prevState) => ({
+                              ...prevState,
+                              checked: event.target.checked,
+                              overrideReminderTime: event.target.checked ? prevState.overrideReminderTime : null,
+                            }));
+                          }}
+                        >
+                          Mark as Tracked until
+                        </Checkbox>
+                        <DatePicker
+                          className="ml-2 w-48"
+                          value={
+                            // Never attempt to convert a falsy value to a moment object.
+                            // Indeed, the only possible falsy value from server should be `null`.
+                            // However, to minimize the exception possibility, ignore all falsy values.
+                            cachedOrderDetail?.overrideReminderTime
+                              ? moment(cachedOrderDetail?.overrideReminderTime)
+                              : null
+                          }
+                          onChange={(date, dateString) => {
+                            setCachedOrderDetail((prevState) => ({
+                              ...prevState,
+                              overrideReminderTime: dateString,
+                            }));
+                          }}
+                          allowClear
+                          placeholder="Forever"
+                          disabled={!cachedOrderDetail?.checked}
+                        />
+                      </Form.Item>
+                    )}
                     {/* Mark as checking-required */}
                     <Form.Item wrapperCol={{ offset: 4 }} className="mb-0">
                       <Checkbox

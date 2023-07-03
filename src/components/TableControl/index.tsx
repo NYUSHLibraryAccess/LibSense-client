@@ -3,6 +3,7 @@ import { AlertOutlined, ClearOutlined, FlagOutlined } from '@ant-design/icons';
 import { Button, message, Pagination, Tooltip } from 'antd';
 
 import { OrderTableContext } from '@/routes/OrderTable';
+import { useAppSelector } from '@/store';
 import { useMarkAttentionMutation, useMarkCheckMutation } from '@/services/orders';
 import { getClassName } from '@/utils/getClassName';
 
@@ -11,6 +12,7 @@ const TableControl: React.FC<{ className?: string; showSelectedRowCount?: boolea
   showSelectedRowCount = false,
   showSummary = false,
 }) => {
+  const { role } = useAppSelector((state) => state.auth);
   const {
     selectedRowKeys,
     setSelectedRowKeys,
@@ -86,33 +88,37 @@ const TableControl: React.FC<{ className?: string; showSelectedRowCount?: boolea
           }}
         />
       </Tooltip>
-      <div className="flex-none w-px h-8 mx-1 bg-gray-300" />
-      <Tooltip title={!btnDisabled && 'Mark as Tracked'} mouseEnterDelay={0.5}>
-        <Button
-          icon={<FlagOutlined />}
-          className="flex-none"
-          disabled={btnDisabled}
-          onClick={() => {
-            markCheck({
-              id: selectedRowKeys,
-              checked: true,
-            });
-          }}
-        />
-      </Tooltip>
-      <Tooltip title={!btnDisabled && 'Remove Tracked Marks'} mouseEnterDelay={0.5}>
-        <Button
-          icon={<ClearOutlined />}
-          className="flex-none"
-          disabled={btnDisabled}
-          onClick={() => {
-            markCheck({
-              id: selectedRowKeys,
-              checked: false,
-            });
-          }}
-        />
-      </Tooltip>
+      {role === 'System Admin' && (
+        <>
+          <div className="flex-none w-px h-8 mx-1 bg-gray-300" />
+          <Tooltip title={!btnDisabled && 'Mark as Tracked'} mouseEnterDelay={0.5}>
+            <Button
+              icon={<FlagOutlined />}
+              className="flex-none"
+              disabled={btnDisabled}
+              onClick={() => {
+                markCheck({
+                  id: selectedRowKeys,
+                  checked: true,
+                });
+              }}
+            />
+          </Tooltip>
+          <Tooltip title={!btnDisabled && 'Remove Tracked Marks'} mouseEnterDelay={0.5}>
+            <Button
+              icon={<ClearOutlined />}
+              className="flex-none"
+              disabled={btnDisabled}
+              onClick={() => {
+                markCheck({
+                  id: selectedRowKeys,
+                  checked: false,
+                });
+              }}
+            />
+          </Tooltip>
+        </>
+      )}
       {showSelectedRowCount && (
         <>
           <div

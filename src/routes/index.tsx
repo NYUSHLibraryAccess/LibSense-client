@@ -4,6 +4,7 @@ import { lazily } from 'react-lazily';
 
 import { MetaTag } from '@/components/MetaTag';
 import { Loading } from '@/routes/Loading';
+import { useAppSelector } from '@/store';
 
 const { Login } = lazily(() => import('./Login'));
 const { NavMenu } = lazily(() => import('./NavMenu'));
@@ -21,6 +22,8 @@ const { About } = lazily(() => import('./Settings/About'));
 const { NotFound } = lazily(() => import('./NotFound'));
 
 const AppRoutes: React.FC = () => {
+  const { role } = useAppSelector((state) => state.auth);
+
   return (
     <>
       <MetaTag />
@@ -32,7 +35,7 @@ const AppRoutes: React.FC = () => {
             <Route path="manageOrders" element={<OrderTable />}>
               <Route index element={<OrderEditor />} />
             </Route>
-            <Route path="uploadData" element={<UploadData />} />
+            {role === 'System Admin' && <Route path="uploadData" element={<UploadData />} />}
             <Route path="exportReport" element={<ExportReport />} />
             <Route path="settings" element={<Settings />}>
               <Route path="users" element={<Users />} />
