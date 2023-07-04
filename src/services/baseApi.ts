@@ -1,12 +1,17 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi, retry } from '@reduxjs/toolkit/query/react';
 
 import { axiosBaseQuery } from './baseQuery';
 
 const baseApi = createApi({
   reducerPath: 'baseApi',
-  baseQuery: axiosBaseQuery({
-    baseUrl: '/api/v1',
-  }),
+  baseQuery: retry(
+    axiosBaseQuery({
+      baseUrl: '/api/v1',
+    }),
+    {
+      maxRetries: 3,
+    }
+  ),
   endpoints: () => ({}),
 });
 
