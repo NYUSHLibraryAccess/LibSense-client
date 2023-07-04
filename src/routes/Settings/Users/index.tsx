@@ -1,4 +1,5 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message, Select, Table } from 'antd';
 
@@ -56,7 +57,7 @@ const CreateModal: React.FC = () => {
   return (
     <StyledModal
       title="Create User"
-      visible={visibleModal === 'create'}
+      open={visibleModal === 'create'}
       width={500}
       confirmLoading={isLoading}
       onCancel={() => {
@@ -162,7 +163,7 @@ const DeleteModal: React.FC = () => {
   return (
     <StyledModal
       title="Delete User"
-      visible={visibleModal === 'delete' && currentUser !== null}
+      open={visibleModal === 'delete' && currentUser !== null}
       width={420}
       confirmLoading={isLoading}
       onCancel={() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { FileUploader } from '@/components/FileUploader';
 import { useUploadSensitiveDataMutation } from '@/services/data';

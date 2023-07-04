@@ -1,4 +1,5 @@
-import React, { Suspense, useMemo } from 'react';
+import * as React from 'react';
+import { Suspense, useMemo } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Menu } from 'antd';
 

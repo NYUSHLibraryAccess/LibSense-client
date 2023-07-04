@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect } from 'react';
 import { Button, Form, Input, Modal, Select, Tag } from 'antd';
 
 import { ContentLimiter } from '@/components/ContentLimiter';

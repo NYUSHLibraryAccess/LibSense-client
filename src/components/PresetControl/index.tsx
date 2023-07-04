@@ -1,7 +1,8 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { DeleteOutlined, DownOutlined, EditOutlined, SaveOutlined, UndoOutlined } from '@ant-design/icons';
-import { Dropdown, Form, Input, Menu, message, Select } from 'antd';
+import { Dropdown, Form, Input, message, Select } from 'antd';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { isEqual, sortBy } from 'lodash-es';
 
@@ -48,7 +49,7 @@ const SaveModal: React.FC = () => {
   return (
     <StyledModal
       title="Save Preset"
-      visible={visibleModal === 'save'}
+      open={visibleModal === 'save'}
       width={420}
       confirmLoading={isLoading}
       onCancel={() => setVisibleModal(null)}
@@ -110,7 +111,7 @@ const SaveAsNewModal: React.FC = () => {
   return (
     <StyledModal
       title="Save As New Preset"
-      visible={visibleModal === 'saveAsNew'}
+      open={visibleModal === 'saveAsNew'}
       width={500}
       confirmLoading={isLoading}
       onCancel={() => {
@@ -190,7 +191,7 @@ const RenameModal: React.FC = () => {
   return (
     <StyledModal
       title="Rename Preset"
-      visible={visibleModal === 'rename'}
+      open={visibleModal === 'rename'}
       width={500}
       confirmLoading={isLoading}
       onCancel={() => {
@@ -251,7 +252,7 @@ const DeleteModal: React.FC = () => {
   return (
     <StyledModal
       title="Delete Preset"
-      visible={visibleModal === 'delete'}
+      open={visibleModal === 'delete'}
       width={420}
       confirmLoading={isLoading}
       onCancel={() => setVisibleModal(null)}
@@ -415,7 +416,7 @@ const PresetControl: React.FC = () => {
             </Select.OptGroup>
           )}
         </Select>
-        <Dropdown overlay={<Menu items={menuItems} />}>
+        <Dropdown menu={{ items: menuItems }}>
           <div className="flex items-center gap-2 select-none cursor-pointer text-violet-600 transition-colors hover:text-violet-900">
             Preset Actions
             <DownOutlined />

@@ -87,16 +87,7 @@ const config = {
           'postcss-loader',
           {
             loader: 'less-loader',
-            options: {
-              lessOptions: {
-                modifyVars: {
-                  'primary-color': '#7c3aed',
-                  'link-color': '#7c3aed',
-                  'border-radius-base': '6px',
-                },
-                javascriptEnabled: true,
-              },
-            },
+            options: { lessOptions: { javascriptEnabled: true } },
           },
         ],
       },

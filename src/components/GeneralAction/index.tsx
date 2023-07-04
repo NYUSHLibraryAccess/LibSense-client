@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 const GeneralAction: React.FC<React.PropsWithChildren<{ onClick: () => void }>> = ({ children, onClick }) => {
   return (

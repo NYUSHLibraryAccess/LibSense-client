@@ -1,4 +1,5 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { EditOutlined, QuestionCircleOutlined, UndoOutlined } from '@ant-design/icons';
 import { MinusOutlined, PlusOutlined, SwapOutlined } from '@ant-design/icons';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
@@ -176,7 +177,7 @@ const ColumnPanel: React.FC = () => {
       </Button>
       <StyledModal
         title="Edit Columns"
-        visible={visible}
+        open={visible}
         footer={
           <>
             <Button icon={<UndoOutlined />} onClick={handleModalReset} className="float-left">

@@ -1,10 +1,11 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { InfoCircleOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, ButtonProps, Checkbox, DatePicker, Form, FormItemProps, Input, message, Select, Spin } from 'antd';
+import dayjs from 'dayjs';
 import jsConvert from 'js-convert-case';
 import { isEqual } from 'lodash-es';
-import moment from 'moment';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import { StyledModal } from '@/components/StyledModal';
@@ -328,7 +329,7 @@ const FormField: React.FC<FormFieldProps> = (props) => {
             // However, to minimize the exception possibility, ignore all falsy values.
             (cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex]
               ? // Assume the type of cachedData is the union of GeneralOrder and CdlOrder, and assume the value is of string type.
-                moment((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string)
+                dayjs((cachedOrderDetail as GeneralOrder & CdlOrder)?.[props.dataIndex] as string)
               : null
           }
           onChange={(date, dateString) => {
@@ -426,7 +427,7 @@ const OrderEditor: React.FC = () => {
     <OrderEditorContext.Provider value={contextValue}>
       <StyledModal
         title="Edit Order"
-        visible={searchParams.has('detail') && searchParams.has('cdl')}
+        open={searchParams.has('detail') && searchParams.has('cdl')}
         footer={
           <>
             <CdlButton disabled={isFetching} />
@@ -510,7 +511,7 @@ const OrderEditor: React.FC = () => {
                             // Indeed, the only possible falsy value from server should be `null`.
                             // However, to minimize the exception possibility, ignore all falsy values.
                             cachedOrderDetail?.overrideReminderTime
-                              ? moment(cachedOrderDetail?.overrideReminderTime)
+                              ? dayjs(cachedOrderDetail?.overrideReminderTime)
                               : null
                           }
                           onChange={(date, dateString) => {

@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import * as React from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Column } from '@ant-design/plots';
 import { CardProps, Input } from 'antd';

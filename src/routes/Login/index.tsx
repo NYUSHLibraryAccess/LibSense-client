@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect } from 'react';
 import { KeyOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 

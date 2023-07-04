@@ -1,4 +1,5 @@
-import React, { Suspense, useContext, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { Suspense, useContext, useEffect, useMemo, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   faAngleDown,
@@ -249,6 +250,7 @@ const NavMenu: React.FC = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { role } = useAppSelector((state) => state.auth);
+  console.log('NavMenu re-rendered', isFetchingAuthStatus);
 
   const [collapsed, setCollapsed] = useState(true);
   const contextValue = useMemo(

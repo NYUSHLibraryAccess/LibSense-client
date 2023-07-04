@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import * as React from 'react';
+import { useContext, useState } from 'react';
 import { SettingOutlined } from '@ant-design/icons';
 import { Button, Form, Radio, Switch } from 'antd';
 
@@ -17,7 +18,7 @@ const TablePanel: React.FC = () => {
       </Button>
       <StyledModal
         title="Table Settings"
-        visible={visible}
+        open={visible}
         footer={null}
         width={650}
         bodyStyle={{

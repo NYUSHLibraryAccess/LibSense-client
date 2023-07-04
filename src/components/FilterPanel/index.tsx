@@ -1,9 +1,10 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { FilterOutlined, UndoOutlined } from '@ant-design/icons';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Badge, Button, DatePicker, Form, Input, Select, Switch, Tag, Tooltip } from 'antd';
+import dayjs, { Dayjs } from 'dayjs';
 import jsConvert from 'js-convert-case';
-import moment, { Moment } from 'moment';
 import Scrollbars from 'react-custom-scrollbars';
 
 import { StyledModal } from '@/components/StyledModal';
@@ -98,7 +99,7 @@ const DateRangeWidget: React.FC<Pick<FilterOption, 'col'>> = ({ col }) => {
     [cachedFilterOptions]
   );
 
-  const handleChange = useCallback((dates: [Moment, Moment], dateStrings: [string, string]) => {
+  const handleChange = useCallback((dates: [Dayjs, Dayjs], dateStrings: [string, string]) => {
     setCachedFilterOptions((prevState) =>
       prevState.map(
         (option) =>
@@ -114,7 +115,7 @@ const DateRangeWidget: React.FC<Pick<FilterOption, 'col'>> = ({ col }) => {
   return (
     <DatePicker.RangePicker
       className="w-full"
-      value={[widgetValue[0] ? moment(widgetValue[0]) : null, widgetValue[1] ? moment(widgetValue[1]) : null]}
+      value={[widgetValue[0] ? dayjs(widgetValue[0]) : null, widgetValue[1] ? dayjs(widgetValue[1]) : null]}
       onChange={handleChange}
     />
   );
@@ -206,7 +207,7 @@ const FilterPanel: React.FC = () => {
       </Badge>
       <StyledModal
         title="Edit Filters / Views"
-        visible={visible}
+        open={visible}
         footer={
           <>
             <Button icon={<UndoOutlined />} onClick={handleModalReset} className="float-left">

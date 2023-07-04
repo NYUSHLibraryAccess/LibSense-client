@@ -1,8 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { HelmetProvider } from 'react-helmet-async';
 import { HashRouter } from 'react-router-dom';
+import { ConfigProvider } from 'antd';
 
 import { AppRoutes } from '@/routes';
 import { store } from '@/store';
@@ -14,9 +15,11 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <HelmetProvider>
-        <HashRouter>
-          <AppRoutes />
-        </HashRouter>
+        <ConfigProvider theme={{ token: { colorPrimary: '#7c3aed' } }}>
+          <HashRouter>
+            <AppRoutes />
+          </HashRouter>
+        </ConfigProvider>
       </HelmetProvider>
     </Provider>
   </React.StrictMode>

@@ -1,6 +1,8 @@
-import React from 'react';
+import * as React from 'react';
+import { version as reactVersion } from 'react';
+import { version as reactDomVersion } from 'react-dom';
 import { GithubOutlined } from '@ant-design/icons';
-import { Form } from 'antd';
+import { Descriptions, version as antdVersion } from 'antd';
 
 import { ContentLimiter } from '@/components/ContentLimiter';
 import logo from '@/assets/logo.png';
@@ -8,67 +10,79 @@ import logo from '@/assets/logo.png';
 const About: React.FC = () => {
   return (
     <ContentLimiter>
-      <Form labelAlign="left" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
-        <Form.Item className="mb-4" wrapperCol={{ span: 24 }}>
+      <Descriptions column={1} labelStyle={{ width: '200px' }}>
+        <Descriptions.Item>
           <div className="flex items-center gap-6">
             <img src={logo} alt="Logo" className="w-16 h-16 drop-shadow" />
             <span className="font-display text-4xl">{__NAME__}</span>
           </div>
-        </Form.Item>
-        <Form.Item label="Version" className="mb-0">
-          {__VERSION__}
-        </Form.Item>
-        <Form.Item label="Build Type" className="mb-0">
-          {__IS_DEV__ ? 'Development Build' : 'Production Build'}
-        </Form.Item>
-        <Form.Item label="Build Time" className="mb-0">
-          {new Date(__BUILD_TIMESTAMP__).toLocaleString()}
-        </Form.Item>
-        <Form.Item label="Build Timestamp" className="mb-0">
-          {__BUILD_TIMESTAMP__}
-        </Form.Item>
-        <Form.Item label="Source Code" className="mb-0">
-          <span
-            className="select-none cursor-pointer transition-colors hover:text-violet-600"
-            onClick={() => {
-              window.open('https://github.com/NYUSHLibraryAccess/LibSense-client', '_blank').focus();
-            }}
+        </Descriptions.Item>
+        <Descriptions.Item label="Version">
+          {__VERSION__} (
+          <a
+            href="https://github.com/NYUSHLibraryAccess/LibSense-client/blob/main/CHANGELOG.md"
+            target="_blank"
+            rel="nofollow noreferrer"
           >
-            <GithubOutlined /> GitHub
-          </span>
-        </Form.Item>
-        <Form.Item label="Credits">
+            Changelog
+          </a>
+          )
+        </Descriptions.Item>
+        <Descriptions.Item label="Package Version">
           <div>
-            Icons made by{' '}
-            <a href="https://www.freepik.com" title="Freepik" target="_blank" rel="nofollow noreferrer">
-              Freepik
-            </a>{' '}
-            from{' '}
-            <a href="https://www.flaticon.com/" title="Flaticon" target="_blank" rel="nofollow noreferrer">
-              www.flaticon.com
-            </a>
+            <div>React: {reactVersion}</div>
+            <div>React DOM: {reactDomVersion}</div>
+            <div>Antd: {antdVersion}</div>
           </div>
+        </Descriptions.Item>
+        <Descriptions.Item label="Build Type">
+          {__IS_DEV__ ? 'Development Build' : 'Production Build'}
+        </Descriptions.Item>
+        <Descriptions.Item label="Build Time">{new Date(__BUILD_TIMESTAMP__).toLocaleString()}</Descriptions.Item>
+        <Descriptions.Item label="Build Timestamp">{__BUILD_TIMESTAMP__}</Descriptions.Item>
+        <Descriptions.Item label="Source Code">
+          <a href="https://github.com/NYUSHLibraryAccess/LibSense-client" target="_blank" rel="nofollow noreferrer">
+            <GithubOutlined /> GitHub
+          </a>
+        </Descriptions.Item>
+        <Descriptions.Item label="Credits">
           <div>
-            Icons made by{' '}
+            <div>
+              Icons made by{' '}
+              <a href="https://www.freepik.com" title="Freepik" target="_blank" rel="nofollow noreferrer">
+                Freepik
+              </a>{' '}
+              from{' '}
+              <a href="https://www.flaticon.com/" title="Flaticon" target="_blank" rel="nofollow noreferrer">
+                www.flaticon.com
+              </a>
+            </div>
+            <div>
+              Icons made by{' '}
+              <a
+                href="https://www.flaticon.com/authors/kerismaker"
+                title="kerismaker"
+                target="_blank"
+                rel="nofollow noreferrer"
+              >
+                kerismaker
+              </a>{' '}
+              from{' '}
+              <a href="https://www.flaticon.com/" title="Flaticon" target="_blank" rel="nofollow noreferrer">
+                www.flaticon.com
+              </a>
+            </div>
             <a
-              href="https://www.flaticon.com/authors/kerismaker"
-              title="kerismaker"
+              href="https://www.freepik.com/free-photo/library-with-books_925672.htm#query=bookshelf&position=42&from_view=keyword&track=sph"
               target="_blank"
               rel="nofollow noreferrer"
             >
-              kerismaker
+              Image by ikaika
             </a>{' '}
-            from{' '}
-            <a href="https://www.flaticon.com/" title="Flaticon" target="_blank" rel="nofollow noreferrer">
-              www.flaticon.com
-            </a>
+            on Freepik
           </div>
-          <a href="https://www.freepik.com/free-photo/library-with-books_925672.htm#query=bookshelf&position=42&from_view=keyword&track=sph">
-            Image by ikaika
-          </a>{' '}
-          on Freepik
-        </Form.Item>
-      </Form>
+        </Descriptions.Item>
+      </Descriptions>
     </ContentLimiter>
   );
 };

@@ -5,13 +5,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  // Fix antd's img and svg problems caused by preflight
-  *[class^='ant'] {
-    img,
-    svg {
-      display: unset;
-      vertical-align: unset;
-    }
-  }
+body {
+  @apply m-0;
 }

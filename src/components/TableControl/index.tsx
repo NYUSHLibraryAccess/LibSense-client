@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import * as React from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { AlertOutlined, ClearOutlined, FlagOutlined } from '@ant-design/icons';
 import { Button, message, Pagination, Tooltip } from 'antd';
 

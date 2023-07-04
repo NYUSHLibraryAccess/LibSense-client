@@ -1,4 +1,5 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, InputNumber, message, Table } from 'antd';
 
@@ -66,7 +67,7 @@ const CreateModal: React.FC = () => {
   return (
     <StyledModal
       title="Create Vendor"
-      visible={visibleModal === 'create'}
+      open={visibleModal === 'create'}
       width={500}
       confirmLoading={isLoading}
       onCancel={() => {
@@ -148,7 +149,7 @@ const UpdateModal: React.FC = () => {
   return (
     <StyledModal
       title="Edit Vendor"
-      visible={visibleModal === 'edit' && currentVendor !== null}
+      open={visibleModal === 'edit' && currentVendor !== null}
       width={500}
       confirmLoading={isLoading}
       onCancel={() => {
@@ -205,7 +206,7 @@ const DeleteModal: React.FC = () => {
   return (
     <StyledModal
       title="Delete Vendor"
-      visible={visibleModal === 'delete' && currentVendor !== null}
+      open={visibleModal === 'delete' && currentVendor !== null}
       width={420}
       confirmLoading={isLoading}
       onCancel={() => {
