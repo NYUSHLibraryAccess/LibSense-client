@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/NYUSHLibraryAccess/LibSense-client/compare/v1.4.0...v1.5.0) (2023-07-04)
+
+
+### Features
+
+* upgrade packages ([b23842e](https://github.com/NYUSHLibraryAccess/LibSense-client/commit/b23842e439c5a14d66ce5c1edf3d6d0a423c17d9))
+
+
+### Bug Fixes
+
+* add interval for retries in error ([e0e7319](https://github.com/NYUSHLibraryAccess/LibSense-client/commit/e0e7319f91da8416ff6d642ff0144d1913070739))
+
 ## [1.4.0](https://github.com/NYUSHLibraryAccess/LibSense-client/compare/v1.3.0...v1.4.0) (2023-07-03)
 
 
