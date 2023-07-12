@@ -250,7 +250,6 @@ const NavMenu: React.FC = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { role } = useAppSelector((state) => state.auth);
-  console.log('NavMenu re-rendered', isFetchingAuthStatus);
 
   const [collapsed, setCollapsed] = useState(true);
   const contextValue = useMemo(
